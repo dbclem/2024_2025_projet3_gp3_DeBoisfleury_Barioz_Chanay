@@ -3,7 +3,7 @@ import pygame
 class Humain : 
     def __init__(self, name, x , y):
         self.name = name # nom de l'humain
-        self.image = pygame.image.load("images/humain.png") # image de l'humain
+        self.image = pygame.image.load("images/image.jpg") # image de l'humain
         self.rect = self.image.get_rect(x=x, y=y) # rectangle de l'image
         self.speed = 5 # vitesse de déplacement
         self.velocity = [0, 0] # vecteur de déplacement
