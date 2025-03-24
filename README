@@ -1,0 +1,44 @@
+Edgar Barioz 
+Cassandre Chanay 
+Clement de Boisfleury
+
+
+Objectif est de comprendre l'egïosme humain à  travers une simulation
+
+1ere étape :  
+    creer un espace de jeu pour la simulation --> un carré
+    creer une maison sous forme d'un carré noir : capacité d'une maison est 10 
+                                                  une maison est récréer automatiquement 
+
+    creer des carrotes qui spawn aléatoirement dans la map
+    creer un humain qui se déplace aléatoirement, a proximité d'une carrote, il se déplace vers elle et la mange 
+
+    pour survivre l'humain doit manger 5 carrotes en 1 minute ( le temps d'une journée ) 
+    sinon il meurt 
+    si il consomme plus de 5 carrotes, a chaque 5 nouvelles carrotes il enjendrera la création d'1 enfant au jour suivant 
+
+    la base est faite et attendre la creation d'environ 70 humains 
+
+    creer un taureau ( 10 viandes ) qui a besoin de la collaboration de 2 humains pour etre tué
+        les deux se partagent la viande --> soit l'equivalent de 5 carrotes chacuns 
+
+2eme étape : 
+
+
+
+
+
+3eme étape : 
+
+    creer une notion d'égoïsme chez chaque humain de 10 à 90 % de 10 en 10
+        à 10% l'humain souhaite une seule viande --> généreux
+        à 90% l'humain souhaite 9 viandes --> égoïste
+    ainsi somme de l'égoïsme < 100 %  : prennent leur part et se patage le reste 
+          somme de l'égoïsme > 100 % : retirer a chacun le nombre de part en trop + 1 part chacun comme punition 
+
+
+    modification de la reproduction : 
+        --> 80 % enjendrera la création d'1 enfant pareil 
+        --> 10 % enjendrera la création d'1 enfant 10 % moins égoïste sauf deja a 10 % d'égoïsme --> enfant pareil
+        --> 10 % enjendrera la création d'1 enfant 10 % plus égoïste sauf deja a 90 % d'égoïsme --> enfant pareil
+
