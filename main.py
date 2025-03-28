@@ -1,5 +1,6 @@
 import pygame
 from clem import Humain
+print("fct = main.py")
 
 class Game : 
     def __init__(self, screen):
@@ -11,6 +12,7 @@ class Game :
         self.area_color = "red"
 
     def handling_events(self):
+        print("fct = handling_events")
         """
         gère les événements
         """
@@ -33,9 +35,10 @@ class Game :
         else:
             self.humain.velocity[1] = 0
 
-    
 
+    
     def update(self):
+        print("fct = update")
         """
         met à jour les données du jeu
         """
@@ -45,8 +48,22 @@ class Game :
         else : 
             self.area_color = "red"
 
+        # limite de carte avce l'ecran 
+        if self.humain.rect.left < 0: # si le personnage sort à gauche
+            self.humain.rect.left = 0  
+
+        if self.humain.rect.right > self.screen.get_width(): # si le personnage sort à droite
+            self.humain.rect.right = self.screen.get_width()
+
+        if self.humain.rect.top < 0: # si le personnage sort en haut
+            self.humain.rect.top = 0    
+
+        if self.humain.rect.bottom > self.screen.get_height(): # si le personnage sort en bas
+            self.humain.rect.bottom = self.screen.get_height()
+
 
     def display(self):
+        print("fct = display")
         """
         affiche les données du jeu
         """
@@ -56,6 +73,7 @@ class Game :
         pygame.display.flip()
 
     def run(self):
+        print("fct = run")
         """
         lance le jeu
         """
@@ -65,8 +83,16 @@ class Game :
             self.display()
             self.clock.tick(60)
 
-    
-pygame.init()
-screen = pygame.display.set_mode((800, 600))
-game = Game(screen)
-game.run()
+
+
+
+pygame.init() # initialisation de pygame
+
+screen_info = pygame.display.Info() # récupération de la taille de l'écran
+screen_width = screen_info.current_w # largeur de l'écran
+screen_height = screen_info.current_h # hauteur de l'écran
+print(f"Screen width: {screen_width}, Screen height: {screen_height}")
+
+screen = pygame.display.set_mode((screen_width, screen_height - 50))  # création de la fenêtre
+game = Game(screen) # création de l'objet Game
+game.run() # lancement de la boucle de jeu

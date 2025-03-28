@@ -3,8 +3,9 @@ import pygame
 class Humain : 
     def __init__(self, name, x , y):
         self.name = name # nom de l'humain
-        self.image = pygame.image.load("images/image.jpg") # image de l'humain
-        self.rect = self.image.get_rect(x=x, y=y) # rectangle de l'image
+        self.bot = pygame.Rect(0, 0, 50, 50)
+        self.bot_area  = "blue"
+        self.rect = pygame.Rect(x, y, 50, 50)
         self.speed = 5 # vitesse de déplacement
         self.velocity = [0, 0] # vecteur de déplacement
 
@@ -19,4 +20,5 @@ class Humain :
         """
         dessine l'humain sur l'écran
         """
-        screen.blit(self.image, self.rect)
+        pygame.draw.rect(screen, self.bot_area, self.rect)
+
