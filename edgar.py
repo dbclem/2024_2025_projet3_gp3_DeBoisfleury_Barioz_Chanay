@@ -19,6 +19,31 @@ screen = pygame.display.set_mode((nb_colones * cell_size, nb_lignes * cell_size)
 #             rect = (i * cell_size, j * cell_size, cell_size, cell_size)
 #             pygame.draw.rect(screen, pygame.Color("black"), rect, width=1)
 
+
+
+# class Food:
+#     def __init__(self):
+#         self.nutrition = 0
+#         self.init_position = (0, 0)
+        
+#     def draw_food (self, screen):
+#         """
+#         Affiche la nourriture sur la carte
+#         """
+#         x = random.randint(0, nb_colones - 1) * cell_size
+#         y = random.randint(0, nb_lignes - 1) * cell_size
+#         rect = (x, y, cell_size, cell_size)
+#         pygame.draw.rect(screen, pygame.Color("orange"), rect)
+
+
+# class carrot(Food) : 
+#     def __init__(self):
+#         super().__init__()
+#         self.nutrition = 1
+#         self.init_position = (0, 0)
+#         self.image = pygame.image.load("carrot.png").convert_alpha()
+
+
 class Food:
     def draw_food (self, screen):
         """
@@ -28,6 +53,7 @@ class Food:
         y = random.randint(0, nb_lignes - 1) * cell_size
         rect = (x, y, cell_size, cell_size)
         pygame.draw.rect(screen, pygame.Color("orange"), rect)
+
 
 
 food = Food()
@@ -40,10 +66,11 @@ while game_on :
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
-            sys.exit()
 
     screen.fill(pygame.Color("white"))
     # show_grid()
     food.draw_food(screen)
     pygame.display.update()
     timer.tick(1)
+
+
