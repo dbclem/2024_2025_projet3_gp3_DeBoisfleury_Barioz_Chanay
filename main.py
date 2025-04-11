@@ -12,7 +12,6 @@ class Game :
         self.area_color = "red"
 
     def handling_events(self):
-        print("fct = handling_events")
         """
         gère les événements
         """
@@ -38,7 +37,7 @@ class Game :
 
     
     def update(self):
-        print("fct = update")
+
         """
         met à jour les données du jeu
         """
@@ -63,7 +62,6 @@ class Game :
 
 
     def display(self):
-        print("fct = display")
         """
         affiche les données du jeu
         """
@@ -73,7 +71,6 @@ class Game :
         pygame.display.flip()
 
     def run(self):
-        print("fct = run")
         """
         lance le jeu
         """
