@@ -22,3 +22,4 @@ class Humain :
         """
         pygame.draw.rect(screen, self.bot_area, self.rect)
 
+#ici
