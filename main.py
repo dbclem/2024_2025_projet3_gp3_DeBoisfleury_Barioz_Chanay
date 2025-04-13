@@ -1,4 +1,6 @@
 import pygame
+from init import screen, foods, taureaus, timer
+from config import screen_width, screen_height
 from clem import Humain
 print("fct = main.py")
 
@@ -84,13 +86,32 @@ class Game :
 
 
 
-pygame.init() # initialisation de pygame
 
-screen_info = pygame.display.Info() # récupération de la taille de l'écran
-screen_width = screen_info.current_w # largeur de l'écran
-screen_height = screen_info.current_h # hauteur de l'écran
-print(f"Screen width: {screen_width}, Screen height: {screen_height}")
 
-screen = pygame.display.set_mode((screen_width, screen_height - 50))  # création de la fenêtre
-game = Game(screen) # création de l'objet Game
-game.run() # lancement de la boucle de jeu
+
+game = Game(screen)  # Création de l'objet Game
+
+
+# Dessine toutes les carottes et les taureaux une fois et stocke leurs positions
+screen.fill(pygame.Color("white"))  # Remplit l'écran avec une couleur blanche
+for food in foods:
+    food.draw_food(screen)  # Affiche chaque carotte sur l'écran
+for tau in taureaus:
+    tau.draw_food(screen)  # Affiche chaque taureau sur l'écran
+pygame.display.update()  # Met à jour l'affichage
+
+# Lancement de la boucle de jeu principale
+while game.running:
+    game.handling_events()
+    game.update()
+    game.display()
+
+    # Gestion des événements pour quitter le jeu
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:  # Vérifie si l'utilisateur ferme la fenêtre
+            game.running = False
+
+    # Limite la boucle à 30 itérations par seconde
+    timer.tick(30)
+
+pygame.quit()  # Quitte pygame proprement
