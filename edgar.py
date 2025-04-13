@@ -51,6 +51,18 @@ class carrot(Super_Food):
             print(f"Erreur lors du chargement de l'image: {e}")
             self.image = None
 
+class taureau(Super_Food): 
+    def __init__(self):
+        super().__init__()
+        self.nutrition = 10
+        self.init_position = (0, 0)
+        try:
+            self.image = pygame.image.load("images/taureau.png").convert_alpha()
+        except pygame.error as e:
+            print(f"Erreur lors du chargement de l'image: {e}")
+            self.image = None
+
+
 
 # class Food:
 #     def draw_food (self, screen):
@@ -67,14 +79,19 @@ class carrot(Super_Food):
 # Crée une liste de 10 carottes
 foods = [carrot() for _ in range(10)]  
 
+# Crée une liste de 5 taureaux
+taureaus = [taureau() for _ in range(5)]  
+
 # Initialise l'horloge pour contrôler la vitesse du jeu
 timer = pygame.time.Clock()
 game_on = True
 
-# Dessine toutes les carottes une fois et stocke leurs positions
+# Dessine toutes les carottes et les taureaux une fois et stocke leurs positions
 screen.fill(pygame.Color("white"))  # Remplit l'écran avec une couleur blanche
 for food in foods:
     food.draw_food(screen)  # Affiche chaque carotte sur l'écran
+for tau in taureaus:
+    tau.draw_food(screen)  # Affiche chaque taureau sur l'écran
 pygame.display.update()  # Met à jour l'affichage
 
 # Boucle principale du jeu
@@ -83,7 +100,7 @@ while game_on:
         if event.type == pygame.QUIT:  # Vérifie si l'utilisateur ferme la fenêtre
             pygame.quit()
 
-    # Pas besoin de redessiner les carottes, on garde juste le jeu en cours
+    # Pas besoin de redessiner les carottes et les taureaux, on garde juste le jeu en cours
     timer.tick(30)  # Limite la boucle à 30 itérations par seconde
 
 
