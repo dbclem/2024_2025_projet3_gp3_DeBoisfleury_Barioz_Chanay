@@ -1,6 +1,5 @@
 import pygame
 from init import screen, foods, taureaus, timer
-from config import screen_width, screen_height
 from clem import Humain
 print("fct = main.py")
 
@@ -68,8 +67,6 @@ class Game :
         """
         affiche les données du jeu
         """
-        self.screen.fill("white")
-        pygame.draw.rect(self.screen, self.area_color, self.area)
         self.humain.draw(self.screen)
         pygame.display.flip()
 
