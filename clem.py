@@ -4,7 +4,8 @@ class Humain :
     def __init__(self, name, x , y):
         self.name = name # nom de l'humain
         self.bot = pygame.Rect(0, 0, 50, 50)
-        self.bot_area  = "blue"
+        self.init_position = (x, y) # position initiale de l'humain
+        self.bot_area = (0, 0, 255, 128)  # Couleur bleue avec opacité réduite (RGBA)
         self.rect = pygame.Rect(x, y, 50, 50)
         self.speed = 5 # vitesse de déplacement
         self.velocity = [0, 0] # vecteur de déplacement

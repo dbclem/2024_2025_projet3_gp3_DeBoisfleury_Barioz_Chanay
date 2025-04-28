@@ -63,6 +63,15 @@ class Game :
             self.humain.rect.bottom = self.screen.get_height()
 
 
+        if self.humain.rect.colliderect(carrots[0].rect) and carrots[0].eat == False:
+            carrot.eat = True
+            print("carrot mangée")
+        
+        if self.humain.init_position == tau.init_position :
+            tau.eat = True
+            print("taureau mangé")
+
+
     def display(self):
         """
         affiche les données du jeu
