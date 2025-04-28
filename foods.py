@@ -3,7 +3,7 @@ import random
 from config import nb_colones, nb_lignes, cell_size
 
 class Super_Food:
-    def __init__(self):
+    def __init__(self, position_x, position_y):
         self.nutrition = 0
         self.init_position = (0, 0)
         self.image = None  # Placeholder for the image
@@ -25,7 +25,6 @@ class carrot(Super_Food):
     def __init__(self):
         super().__init__()
         self.nutrition = 1
-        self.init_position = (0, 0)
         try:
             self.image = pygame.image.load("images/carrot.png").convert_alpha()
         except pygame.error as e:
@@ -36,7 +35,6 @@ class taureau(Super_Food):
     def __init__(self):
         super().__init__()
         self.nutrition = 10
-        self.init_position = (0, 0)
         try:
             self.image = pygame.image.load("images/taureau.png").convert_alpha()
         except pygame.error as e:
