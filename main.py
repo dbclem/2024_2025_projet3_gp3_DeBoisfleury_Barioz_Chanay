@@ -1,5 +1,5 @@
 import pygame
-from init import screen, foods, taureaus, timer
+from init import screen, carrots, taureaus, timer
 from clem import Humain
 print("fct = main.py")
 
@@ -82,19 +82,22 @@ class Game :
 
 
 
-
-
-
-
 game = Game(screen)  # Création de l'objet Game
 
+def draw_food(screen, image, pos_x, pos_y):
+    """
+    Dessine la nourriture sur la carte
+    """
+    rect = (pos_x, pos_y, 10, 10)  # Taille de la nourriture
+    screen.blit(image, rect)  # Affiche l'image de la nourriture à la position donnée
+    pygame.draw.rect(screen, pygame.Color("white"), rect)  # Dessine un rectangle orange pour la nourriture
 
 # Dessine toutes les carottes et les taureaux une fois et stocke leurs positions
 screen.fill(pygame.Color("white"))  # Remplit l'écran avec une couleur blanche
-for food in foods:
-    food.draw_food(screen)  # Affiche chaque carotte sur l'écran
+for carrot in carrots:
+    draw_food(screen, carrot.image, carrot.init_position[0], carrot.init_position[1])  # Affiche chaque carotte sur l'écran
 for tau in taureaus:
-    tau.draw_food(screen)  # Affiche chaque taureau sur l'écran
+    draw_food(screen, tau.image, tau.init_position[0], tau.init_position[1])  # Affiche chaque taureau sur l'écran
 pygame.display.update()  # Met à jour l'affichage
 
 # Lancement de la boucle de jeu principale
