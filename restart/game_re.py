@@ -7,10 +7,10 @@ class Game :
     def __init__(self):
         
 
-        self.screen = pygame.display.set_mode((800, 600))
+        self.screen = pygame.display.set_mode((800, 800))
         pygame.display.set_caption("Game")
 
-        tmx_data = pytmx.util_pygame.load_pygame("map\map_1er_jet.tmx")
+        tmx_data = pytmx.util_pygame.load_pygame("map/map_1er_jet.tmx")
         map_data = pyscroll.data.TiledMapData(tmx_data)
         
         map_layer = pyscroll.orthographic.BufferedRenderer(map_data, self.screen.get_size())
@@ -24,7 +24,7 @@ class Game :
         
         while running:
         
-            self.groupe.draw(self.screen)
+            self.group.draw(self.screen)
             pygame.display.flip()
 
             for event in pygame.event.get():
