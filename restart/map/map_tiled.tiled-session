@@ -1,5 +1,5 @@
 {
-    "activeFile": "1er_map.tmx",
+    "activeFile": "map_1er_jet.tmx",
     "expandedProjectPaths": [
     ],
     "fileStates": {
@@ -7,24 +7,43 @@
             "scale": 2.1909375,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 203.56582513193553,
-                "y": 160.2053915275995
+                "x": 264.270432178006,
+                "y": 159.9771787191556
             }
+        },
+        "House-Sheet.tsx": {
+            "scaleInDock": 1
+        },
+        "basic-tree.tsx": {
+            "scaleInDock": 1
+        },
+        "complete-dirt-tileset.tsx": {
+            "scaleInDock": 1
         },
         "complete-grass-tileset.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 4
+        },
+        "map_1er_jet.tmx": {
+            "scale": 2.0425,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 239.90208078335374,
+                "y": 160.09791921664623
+            }
         }
     },
     "last.imagePath": "C:/Users/jdeboisfleury/Desktop/Clement/NSI/projet 3/2024_2025_projet3_gp3_DeBoisfleury_Barioz_Chanay/map/cozy-island-basic/cozy-island-basic",
     "openFiles": [
         "1er_map.tmx",
-        "complete-grass-tileset.tsx"
+        "complete-grass-tileset.tsx",
+        "map_1er_jet.tmx"
     ],
     "project": "",
     "recentFiles": [
+        "1er_map.tmx",
         "complete-grass-tileset.tsx",
-        "1er_map.tmx"
+        "map_1er_jet.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
