@@ -5,7 +5,7 @@ if __name__ == "__main__":
     pygame.init()
 
     try:
-        image = pygame.image.load("map/map_1er_jet.tmx")
+        image = pygame.image.load("map/1map.tmx")
         print("Image chargée avec succès")
     except pygame.error as e:
         print(f"Erreur lors du chargement de l'image : {e}")
