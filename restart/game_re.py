@@ -3,6 +3,7 @@ import pytmx
 import pyscroll
 import pytmx.util_pygame
 from player import Player   
+from random import randint
 
 class Game : 
     def __init__(self):
@@ -35,7 +36,7 @@ class Game :
 
     def input(self) : 
         key_pressed = pygame.key.get_pressed() # recuperer les touches pressées
-
+        
         if key_pressed[pygame.K_UP]: # si la touche haut est pressée
             self.player.move_up() # deplacer le joueur vers le haut
             self.player.change_animation("up") # changer l'animation du joueur vers le haut
@@ -51,6 +52,29 @@ class Game :
         elif key_pressed[pygame.K_RIGHT]:
             self.player.move_right()
             self.player.change_animation("right") # changer l'animation du joueur vers la droite
+
+
+        if key_pressed[pygame.K_r] : 
+            random_nb = randint(0, 3) # generer un nombre aleatoire entre 0 et 100
+            #random mvt
+            if random_nb == 0: # si la touche haut est pressée
+                self.player.move_up() # deplacer le joueur vers le haut
+                self.player.change_animation("up") # changer l'animation du joueur vers le haut
+
+            elif random_nb == 1:
+                self.player.move_down() # deplacer le joueur vers le bas
+                self.player.change_animation("down") # changer l'animation du joueur vers le bas
+
+            elif random_nb == 2:
+                self.player.move_left()
+                self.player.change_animation("left") # changer l'animation du joueur vers la gauche
+
+            elif random_nb == 3:
+                self.player.move_right()
+                self.player.change_animation("right") # changer l'animation du joueur vers la droite
+
+
+
 
 
     def update(self):
@@ -81,7 +105,7 @@ class Game :
                 if event.type == pygame.QUIT:
                     running = False
 
-            time_clock.tick(60)
+            time_clock.tick(30)
 
 
         pygame.quit()

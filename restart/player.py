@@ -28,7 +28,7 @@ class Player(pygame.sprite.Sprite):
 
         self.position = [x, y]
         self.old_position = self.position.copy() # copier l'ancienne position du joueur
-        self.speed = 3 # vitesse de deplacement du joueur
+        self.speed = 16 # vitesse de deplacement du joueur
 
     def save_location (self) : 
         self.old_position = self.position.copy()
@@ -38,7 +38,7 @@ class Player(pygame.sprite.Sprite):
         """
         Change l'animation du joueur en fonction de la direction
         """
-        if       direction in self.dico_anim:
+        if  direction in self.dico_anim:
             self.image = self.dico_anim[direction]
             self.image.set_colorkey((0, 0, 0))
 
