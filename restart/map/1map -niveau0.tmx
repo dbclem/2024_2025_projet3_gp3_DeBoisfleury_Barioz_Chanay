@@ -208,7 +208,7 @@
 </data>
  </layer>
  <objectgroup id="14" name="porte sortie" class="goal">
-  <object id="80" type="sortie" x="510.739" y="175.596" width="49.0913" height="15.105"/>
+  <object id="80" type="goal" x="510.739" y="175.596" width="49.0913" height="15.105"/>
  </objectgroup>
  <layer id="9" name="décorations" width="54" height="54">
   <data encoding="csv">

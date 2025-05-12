@@ -5,7 +5,7 @@
  <tileset firstgid="1939" source="Key 1 - GOLD -.tsx"/>
  <tileset firstgid="1941" source="key final.tsx"/>
  <objectgroup id="14" name="porte sortie" class="goal">
-  <object id="80" type="sortie" x="510.739" y="175.596" width="49.0913" height="15.105"/>
+  <object id="80" type="goal" x="510.739" y="175.596" width="49.0913" height="15.105"/>
  </objectgroup>
  <objectgroup id="11" name="bordure">
   <object id="34" type="collision" x="11.2397" y="831.741" width="830.617" height="10.1158"/>
