@@ -98,8 +98,12 @@ class Game :
                 self.current_episode = 0 
 
     def episode(self, init_x, init_y, goal_x, goal_y):
+        """
+        Calculer le nombre d'episodes en fonction de la distance entre le joueur et le but
+        """
+        multiplicateur_d_min = 0.3
         d_manhattan = abs(init_y - init_x) + abs(goal_y - goal_x)
-        nb_episodes = int( ( int(d_manhattan) + int(d_manhattan) * 0.3) // 16) 
+        nb_episodes = int( ( int(d_manhattan) + int(d_manhattan) * multiplicateur_d_min) // 16) 
         print("nb episodes : ", nb_episodes)
         return nb_episodes
 
@@ -124,7 +128,8 @@ class Game :
                     running = False
 
             if self.current_episode >= nb_episode_max:
-                running = False
+                self.player.position = [390, 783] # remettre le joueur à sa position d'origine
+                self.current_episode = 0
 
             time_clock.tick(30)
 
