@@ -10,20 +10,18 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect() # recuperer le rectangle de l'image pour la positionner sur l'ecran
         self.feet = pygame.Rect(0, 0, self.rect.width // 2, 12) # recuperer le rectangle de la position du joueur
 
-        """
         self.dico_anim = {
             "down": [self.get_image(0, 0), self.get_image(32, 0), self.get_image(64, 0)], # recuperer les images de l'animation vers le bas
-            "up": [self.get_image(0, 32), self.get_image(32, 32), self.get_image(64, 32)], # recuperer les images de l'animation vers le haut
-            "left": [self.get_image(0, 64), self.get_image(32, 64), self.get_image(64, 64)], # recuperer les images de l'animation vers la gauche
-            "right": [self.get_image(0, 96), self.get_image(32, 96), self.get_image(64, 96)] # recuperer les images de l'animation vers la droite
+            "left": [self.get_image(0, 32), self.get_image(32, 32), self.get_image(64, 32)], # recuperer les images de l'animation vers le haut
+            "right": [self.get_image(0, 64), self.get_image(32, 64), self.get_image(64, 64)], # recuperer les images de l'animation vers la gauche
+            "up": [self.get_image(0, 96), self.get_image(32, 96), self.get_image(64, 96)] # recuperer les images de l'animation vers la droite
         }
-        """ 
-        self.dico_anim = { # dictionnaire pour stocker les animations
-            "down": self.get_image(0, 0), # recuperer les images de l'animation vers le bas
-            "left": self.get_image(0, 32), # recuperer les images de l'animation vers le haut
-            "right": self.get_image(0, 64), # recuperer les images de l'animation vers la gauche
-            "up": self.get_image(0, 96) # recuperer les images de l'animation vers la droite
-        }  
+        # self.dico_anim = { # dictionnaire pour stocker les animations
+        #     "down": self.get_image(0, 0), # recuperer les images de l'animation vers le bas
+        #     "left": self.get_image(0, 32), # recuperer les images de l'animation vers le haut
+        #     "right": self.get_image(0, 64), # recuperer les images de l'animation vers la gauche
+        #     "up": self.get_image(0, 96) # recuperer les images de l'animation vers la droite
+        # }
         
 
         self.position = [x, y]
@@ -38,8 +36,12 @@ class Player(pygame.sprite.Sprite):
         """
         Change l'animation du joueur en fonction de la direction
         """
-        if  direction in self.dico_anim:
-            self.image = self.dico_anim[direction]
+        if direction in self.dico_anim:
+            # Pour animer, il faut parcourir les images de la liste d'animation
+            if not hasattr(self, "anim_index"):
+                self.anim_index = 0
+            self.anim_index = (self.anim_index + 1) % len(self.dico_anim[direction])
+            self.image = self.dico_anim[direction][self.anim_index]
             self.image.set_colorkey((0, 0, 0))
 
     def move_right(self):

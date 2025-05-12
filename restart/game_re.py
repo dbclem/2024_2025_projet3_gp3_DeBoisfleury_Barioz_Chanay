@@ -31,7 +31,6 @@ class Game :
         self.goal_rects = []
         for obj in tmx_data.objects: # pour chaque objet de la carte
             if obj.type == "collision":
-                print("collision")
                 self.collision_rects.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height)) # recuperer les rectangles de collision
             elif obj.type == "goal": # si l'objet est un but
                 self.goal_rects.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height)) # recuperer les rectangles de but
