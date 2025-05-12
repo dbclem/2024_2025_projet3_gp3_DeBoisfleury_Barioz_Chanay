@@ -42,6 +42,31 @@ class Game :
 
         self.current_episode = 0 # initialiser le nombre d'episodes
 
+
+    def appliquer_action(self, state,action): 
+        x, y = state # recuperer la position du joueur
+
+        if action == "up": # si l'action est de deplacer le joueur vers le haut
+            self.player.move_up() # deplacer le joueur vers le haut
+            self.player.change_animation("up") # changer l'animation du joueur vers le haut
+            self.current_episode = adding_one(self.current_episode) # ajouter 1 au nombre d'episodes
+
+        elif action == "down": # si l'action est de deplacer le joueur vers le bas
+            self.player.move_down() # deplacer le joueur vers le bas    
+            self.player.change_animation("down")
+            self.current_episode = adding_one(self.current_episode)
+
+        elif action == "left": # si l'action est de deplacer le joueur vers la gauche
+            self.player.move_left() # deplacer le joueur vers la gauche
+            self.player.change_animation("left")
+            self.current_episode = adding_one(self.current_episode)
+        
+        elif action == "right": # si l'action est de deplacer le joueur vers la droite
+            self.player.move_right() # deplacer le joueur vers la droite
+            self.player.change_animation("right")
+            self.current_episode = adding_one(self.current_episode)
+
+
     def input(self) : 
         key_pressed = pygame.key.get_pressed() # recuperer les touches pressées
         
@@ -64,25 +89,6 @@ class Game :
             self.player.move_right()
             self.player.change_animation("right") # changer l'animation du joueur vers la droite
             self.current_episode = adding_one(self.current_episode)
-
-        if key_pressed[pygame.K_r] :
-            random_nb = randint(0, 3) # generer un nombre aleatoire entre 0 et 100
-            #random mvt
-            if random_nb == 0: # si la touche haut est pressée
-                self.player.move_up() # deplacer le joueur vers le haut
-                self.player.change_animation("up") # changer l'animation du joueur vers le haut
-
-            elif random_nb == 1:
-                self.player.move_down() # deplacer le joueur vers le bas
-                self.player.change_animation("down") # changer l'animation du joueur vers le bas
-
-            elif random_nb == 2:
-                self.player.move_left()
-                self.player.change_animation("left") # changer l'animation du joueur vers la gauche
-
-            elif random_nb == 3:
-                self.player.move_right()
-                self.player.change_animation("right") # changer l'animation du joueur vers la droite
 
 
 
