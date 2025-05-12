@@ -33,3 +33,10 @@ def read_from_pickle_file(pickle_file_name):
 def write_in_pickle_file(q_table, pickle_file_name):
     with open(pickle_file_name, "wb") as f:
         pickle.dump(q_table, f)
+
+
+"""projet"""
+
+def adding_one(nombre):
+    print(nombre)
+    return nombre + 1 
