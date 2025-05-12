@@ -17,7 +17,7 @@ class Game :
 
         # charger la carte
         # tmx_data = pytmx.util_pygame.load_pygame("map/1map -niveau0.tmx")
-        tmx_data = pytmx.util_pygame.load_pygame("map/1map -niveau1.tmx")
+        tmx_data = pytmx.util_pygame.load_pygame("map/1map -niveau0.tmx")
         map_data = pyscroll.data.TiledMapData(tmx_data)
         map_layer = pyscroll.orthographic.BufferedRenderer(map_data, self.screen.get_size())
         map_layer.zoom = 2
@@ -28,11 +28,13 @@ class Game :
 
         # definir une lsite qui stock les rectangles de collision
         self.collision_rects = []
+        self.goal_rects = []
         for obj in tmx_data.objects: # pour chaque objet de la carte
             if obj.type == "collision":
+                print("collision")
                 self.collision_rects.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height)) # recuperer les rectangles de collision
             elif obj.type == "goal": # si l'objet est un but
-                self.player.position = [player_position.x, player_position.y] # position du joueur
+                self.goal_rects.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height)) # recuperer les rectangles de but
         
         # charger les calques de la carte
         self.group = pyscroll.PyscrollGroup(map_layer=map_layer, default_layer=3) # group de sprites
@@ -91,7 +93,9 @@ class Game :
         for sprite in self.group.sprites():
             if sprite.feet.collidelist(self.collision_rects) > -1: # -1 est la valeur de retour si il n'y a pas de collision
                 sprite.move_back() # si le joueur touche un rectangle de collision, il revient à sa position précédente
-
+            if sprite.feet.collidelist(self.goal_rects) > -1: # si le joueur touche un rectangle de but
+                self.player.position = [390, 783] # remettre le joueur à sa position d'origine
+                self.current_episode = 0 
 
     def episode(self, init_x, init_y, goal_x, goal_y):
         d_manhattan = abs(init_y - init_x) + abs(goal_y - goal_x)
