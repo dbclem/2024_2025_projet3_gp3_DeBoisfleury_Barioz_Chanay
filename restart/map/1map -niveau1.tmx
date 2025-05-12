@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="54" height="54" tilewidth="16" tileheight="16" infinite="0" nextlayerid="15" nextobjectid="88">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="54" height="54" tilewidth="16" tileheight="16" infinite="0" nextlayerid="15" nextobjectid="89">
  <tileset firstgid="1" source="RPG Nature Tileset.tsx"/>
  <tileset firstgid="721" source="house.tsx"/>
- <objectgroup id="14" name="porte sortie">
+ <objectgroup id="14" name="porte sortie" class="goal">
   <object id="80" type="sortie" x="510.739" y="175.596" width="49.0913" height="15.105"/>
  </objectgroup>
  <objectgroup id="11" name="bordure">
