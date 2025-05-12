@@ -44,10 +44,10 @@ class Player(pygame.sprite.Sprite):
 
     def move_right(self):
         self.position[0] += self.speed
-    
+        
     def move_left(self):
         self.position[0] -= self.speed
-    
+
     def move_up(self):
         self.position[1] -= self.speed
 
