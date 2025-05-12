@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="54" height="54" tilewidth="16" tileheight="16" infinite="0" nextlayerid="15" nextobjectid="84">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="54" height="54" tilewidth="16" tileheight="16" infinite="0" nextlayerid="15" nextobjectid="86">
  <tileset firstgid="1" source="RPG Nature Tileset.tsx"/>
  <tileset firstgid="721" source="house.tsx"/>
  <objectgroup id="14" name="porte sortie">
@@ -35,8 +35,8 @@
   <object id="73" type="collision" x="29.266" y="495.634" width="186.925" height="15.105"/>
   <object id="74" type="collision" x="432.381" y="467.312" width="12.2728" height="55.6998"/>
   <object id="75" type="collision" x="351.192" y="468.256" width="14.161" height="54.7557"/>
-  <object id="82" type="collision" x="182" y="288.75" width="52.5" height="12.25"/>
-  <object id="83" type="collision" x="612.545" y="720.545" width="23.6364" height="13.2727"/>
+  <object id="84" type="collision" x="611.273" y="720.364" width="25.6364" height="36"/>
+  <object id="85" type="collision" x="179.636" y="288.182" width="56.3636" height="38.3636"/>
  </objectgroup>
  <layer id="1" name="riviere + pont" width="54" height="54">
   <data encoding="csv">
