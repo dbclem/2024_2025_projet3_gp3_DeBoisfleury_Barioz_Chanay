@@ -31,7 +31,9 @@ class Game :
         for obj in tmx_data.objects: # pour chaque objet de la carte
             if obj.type == "collision":
                 self.collision_rects.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height)) # recuperer les rectangles de collision
-
+            elif obj.type == "goal": # si l'objet est un but
+                self.player.position = [player_position.x, player_position.y] # position du joueur
+        
         # charger les calques de la carte
         self.group = pyscroll.PyscrollGroup(map_layer=map_layer, default_layer=3) # group de sprites
         self.group.add(self.player) # ajouter le joueur au groupe de sprites
