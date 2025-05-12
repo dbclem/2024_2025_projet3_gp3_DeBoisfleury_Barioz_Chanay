@@ -16,8 +16,9 @@ def create_q_table(largeur, hauteur, actions):
     print(q_table)
     return q_table
 
+
+"""creation de la q_table"""
 # actions = ["up", "down", "left", "right"]
 # q_table = create_q_table(50, 50, actions)
 # write_in_pickle_file(q_table, "q_table.pickle")
-q_table_read = read_from_pickle_file("q_table.pickle")
-print(q_table_read)
+
