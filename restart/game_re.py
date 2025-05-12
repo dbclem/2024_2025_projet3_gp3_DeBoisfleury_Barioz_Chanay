@@ -84,10 +84,16 @@ class Game :
             if sprite.feet.collidelist(self.collision_rects) > -1: # -1 est la valeur de retour si il n'y a pas de collision
                 sprite.move_back() # si le joueur touche un rectangle de collision, il revient à sa position précédente
 
+    def episode(self, init_x, init_y, goal_x, goal_y):
+        d_manhattan = abs(init_y - init_x) + abs(goal_y - goal_x)
+        nb_episodes = int( ( int(d_manhattan) + int(d_manhattan) * 0.3) // 16) 
+        print("nb episodes : ", nb_episodes)
+        return nb_episodes
+
     def run(self):
 
         running = True
-        
+        self.episode(self.player.position[0], self.player.position[1], 510, 175)
         time_clock = pygame.time.Clock() # horloge pour gerer le temps
 
         while running:
@@ -106,5 +112,6 @@ class Game :
 
             time_clock.tick(30)
 
-
         pygame.quit()
+        return running
+
