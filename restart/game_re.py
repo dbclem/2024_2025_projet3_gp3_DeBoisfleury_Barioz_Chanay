@@ -67,6 +67,21 @@ class Game :
             self.current_episode = adding_one(self.current_episode)
 
 
+
+        """ajouter une recompense en fonction de la distance entre le joueur et le but""" 
+        for sprite in self.group.sprites():
+            if sprite.feet.collidelist(self.collision_rects) > -1: # -1 est la valeur de retour si il n'y a pas de collision*
+                return state, -1, False 
+            if sprite.feet.collidelist(self.goal_rects) > -1: # si le joueur touche un rectangle de but
+                return (x, y), 10, True # retourner la position du joueur, la recompense et si le jeu est fini
+            
+        return state, -0.1, False # mouvement normal, petite punition pour encourager l’efficacité
+
+
+
+    
+
+
     def input(self) : 
         key_pressed = pygame.key.get_pressed() # recuperer les touches pressées
         
