@@ -121,7 +121,7 @@ class Game :
         """
         Calculer le nombre d'episodes en fonction de la distance entre le joueur et le but
         """
-        multiplicateur_d_min = 0.3
+        multiplicateur_d_min = 0.35
         d_manhattan = abs(init_y - init_x) + abs(goal_y - goal_x)
         nb_episodes = int( ( int(d_manhattan) + int(d_manhattan) * multiplicateur_d_min) // 16) 
         print("nb episodes : ", nb_episodes)
