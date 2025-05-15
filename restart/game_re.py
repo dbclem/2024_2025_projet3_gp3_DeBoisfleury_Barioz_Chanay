@@ -148,6 +148,7 @@ class Game :
                     running = False
 
             if self.current_episode >= nb_episode_max:
+                pygame.time.wait(250)
                 self.player.position = [390, 783] # remettre le joueur à sa position d'origine
                 self.current_episode = 0
 

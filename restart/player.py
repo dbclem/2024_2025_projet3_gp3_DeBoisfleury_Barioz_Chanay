@@ -35,7 +35,7 @@ class Player(pygame.sprite.Sprite):
     def change_animation(self, direction):
         """
         Change l'animation du joueur en fonction de la direction*
-        fonction demandée a copilot totalement
+        fonction demandée a copilot totalement mais pas le dico
         """
         if direction in self.dico_anim:
             # Pour animer, il faut parcourir les images de la liste d'animation
