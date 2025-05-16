@@ -16,17 +16,19 @@ def create_q_table(largeur, hauteur, actions):
     print(q_table)
     return q_table
 
-def find_biggest_q_value(q_table, etat):
+def find_biggest_q_value(state):
     """
     Find the action with the highest Q-value for a given state.
     """
     max_action = None
     max_value = float('-inf')
-    for action, value in q_table[etat].items():
+    for action, value in state.items():
         if value > max_value:
             max_value = value
             max_action = action
     return max_action
+
+
 
 """creation de la q_table"""
 actions = ["up", "down", "left", "right"]
