@@ -13,7 +13,6 @@ def create_q_table(largeur, hauteur, actions):
                 q_table[etat][action] = 0.0  # Q-value initiale
 
     print("Q-table created with dimensions:", largeur, "x", hauteur)
-    print(q_table)
     return q_table
 
 def find_biggest_q_value(state):

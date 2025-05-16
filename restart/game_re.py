@@ -3,7 +3,7 @@ import pytmx
 import pyscroll
 import pytmx.util_pygame
 from player import Player   
-from q_table import create_q_table
+from q_table import create_q_table, find_biggest_q_value
 from tools import read_from_pickle_file, write_in_pickle_file
 import random
 from tools import adding_one
@@ -187,7 +187,8 @@ class Game :
                     if random.uniform(0, 1) < epsilon:
                         action = random.choice(actions)
                     else:
-                        action = max(q_table[state], key=q_table[state].get)
+                        print(q_table[state])
+                        action = find_biggest_q_value(q_table[state].key())
 
                     # Appliquer l'action, obtenir le nouvel état et la récompense
                     new_state, reward, done = self.appliquer_action(state, action)
