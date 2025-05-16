@@ -15,14 +15,7 @@ class Player(pygame.sprite.Sprite):
             "left": [self.get_image(0, 32), self.get_image(32, 32), self.get_image(64, 32)], # recuperer les images de l'animation vers le haut
             "right": [self.get_image(0, 64), self.get_image(32, 64), self.get_image(64, 64)], # recuperer les images de l'animation vers la gauche
             "up": [self.get_image(0, 96), self.get_image(32, 96), self.get_image(64, 96)] # recuperer les images de l'animation vers la droite
-        }
-        # self.dico_anim = { # dictionnaire pour stocker les animations
-        #     "down": self.get_image(0, 0), # recuperer les images de l'animation vers le bas
-        #     "left": self.get_image(0, 32), # recuperer les images de l'animation vers le haut
-        #     "right": self.get_image(0, 64), # recuperer les images de l'animation vers la gauche
-        #     "up": self.get_image(0, 96) # recuperer les images de l'animation vers la droite
-        # }
-        
+        }        
 
         self.position = [x, y]
         self.old_position = self.position.copy() # copier l'ancienne position du joueur
