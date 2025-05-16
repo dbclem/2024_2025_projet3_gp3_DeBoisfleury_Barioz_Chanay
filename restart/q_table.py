@@ -33,5 +33,3 @@ def find_biggest_q_value(state):
 actions = ["up", "down", "left", "right"]
 q_table = create_q_table(50, 50, actions)
 write_in_pickle_file(q_table, "q_table.pickle")
-
-print(q_table)
