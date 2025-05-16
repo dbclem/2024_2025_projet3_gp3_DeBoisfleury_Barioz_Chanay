@@ -187,8 +187,7 @@ class Game :
                     if random.uniform(0, 1) < epsilon:
                         action = random.choice(actions)
                     else:
-                        print(q_table[state])
-                        action = find_biggest_q_value(q_table[state].key())
+                        action = find_biggest_q_value(q_table[state], key=q_table[state].get)
 
                     # Appliquer l'action, obtenir le nouvel état et la récompense
                     new_state, reward, done = self.appliquer_action(state, action)
