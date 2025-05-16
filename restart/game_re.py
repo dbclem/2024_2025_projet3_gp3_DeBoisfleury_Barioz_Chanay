@@ -110,7 +110,7 @@ class Game :
                 sprite.move_back() # si le joueur touche un rectangle de collision, il revient à sa position précédente
             if sprite.feet.collidelist(self.goal_rects) > -1: # si le joueur touche un rectangle de but
                 font_finish = pygame.font.SysFont(None, 60)
-                text_finish = font_finish.render("VOUS AVEZ ATTEINT LA SORTIE", True, (255, 0, 0))
+                text_finish = font_finish.render("VOUS AVEZ ATTEINT LA SORTIE", True, (0, 255, 0))
                 text_rect = text_finish.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 2))
                 self.screen.blit(text_finish, text_rect)
                 pygame.display.flip()
