@@ -13,7 +13,7 @@ class Game :
     def __init__(self):
         
 
-        self.screen = pygame.display.set_mode((800, 800))
+        self.screen = pygame.display.set_mode((54*16, 54*16))
         pygame.display.set_caption("Game")
 
 
@@ -22,7 +22,6 @@ class Game :
         tmx_data = pytmx.util_pygame.load_pygame("map/1map -niveau0.tmx")
         map_data = pyscroll.data.TiledMapData(tmx_data)
         map_layer = pyscroll.orthographic.BufferedRenderer(map_data, self.screen.get_size())
-        map_layer.zoom = 2
 
         # charger le joueur 
         player_position = tmx_data.get_object_by_name("player")
@@ -42,6 +41,15 @@ class Game :
         self.group.add(self.player) # ajouter le joueur au groupe de sprites
 
         self.current_episode = 0 # initialiser le nombre d'episodes
+
+    def show_grid(self):
+        """
+        Afficher la grille de la carte
+        """
+        for x in range(0, self.screen.get_width(), 16):
+            pygame.draw.line(self.screen, (255, 0, 0), (x, 0), (x, self.screen.get_height()), 1)
+        for y in range(0, self.screen.get_height(), 16):
+            pygame.draw.line(self.screen, (255, 0, 0), (0, y), (self.screen.get_width(), y), 1)   
 
 
     def appliquer_action(self, state,action): 
@@ -87,6 +95,7 @@ class Game :
                 return (x, y), 10, True # retourner la position du joueur, la recompense et si le jeu est fini
             
         return state, -0.1, False # mouvement normal, petite punition pour encourager l’efficacité
+
 
 
     def input(self) : 
@@ -155,6 +164,7 @@ class Game :
             self.update()
             self.group.center(self.player.rect) # centrer la camera sur le joueur
             self.group.draw(self.screen) # dessiner le groupe de sprites sur l'ecran
+            self.show_grid() # afficher la grille de la carte
             
             # Afficher le nombre max d'épisodes en haut à gauche
             font_episode_max = pygame.font.SysFont(None, 36)
@@ -167,42 +177,42 @@ class Game :
 
             pygame.display.flip() # rafraichir l'ecran
 
-            alpha = 0.1     # taux d'apprentissage
-            gamma = 0.9     # facteur de récompense future
-            epsilon = 0.1   # probabilité d'explorer plutôt que d'exploiter
-            actions = ["up", "down", "left", "right"] # actions possibles
+            # alpha = 0.1     # taux d'apprentissage
+            # gamma = 0.9     # facteur de récompense future
+            # epsilon = 0.1   # probabilité d'explorer plutôt que d'exploiter
+            # actions = ["up", "down", "left", "right"] # actions possibles
 
 
-            for episode in range(nb_episode_max):
-                state = self.player.position # position du joueur
-                done = False
-                # Initialiser la Q-table si elle n'existe pas
-                try:
-                    q_table = read_from_pickle_file("q_table.pickle")
-                except FileNotFoundError:
-                    q_table = create_q_table(50, 50, actions)
+            # for episode in range(nb_episode_max):
+            #     state = self.player.position # position du joueur
+            #     done = False
+            #     # Initialiser la Q-table si elle n'existe pas
+            #     try:
+            #         q_table = read_from_pickle_file("q_table.pickle")
+            #     except FileNotFoundError:
+            #         q_table = create_q_table(50, 50, actions)
 
-                while not done:
-                    # Choisir une action (exploration ou exploitation)
-                    if random.uniform(0, 1) < epsilon:
-                        action = random.choice(actions)
-                    else:
-                        action = find_biggest_q_value(q_table[state], key=q_table[state].get)
+            #     while not done:
+            #         # Choisir une action (exploration ou exploitation)
+            #         if random.uniform(0, 1) < epsilon:
+            #             action = random.choice(actions)
+            #         else:
+            #             action = find_biggest_q_value(q_table[state], key=q_table[state].get)
 
-                    # Appliquer l'action, obtenir le nouvel état et la récompense
-                    new_state, reward, done = self.appliquer_action(state, action)
+            #         # Appliquer l'action, obtenir le nouvel état et la récompense
+            #         new_state, reward, done = self.appliquer_action(state, action)
 
-                    # Mise à jour de la Q-table
-                    old_value = q_table[state][action]
-                    future_max = max(q_table[new_state].values())
+            #         # Mise à jour de la Q-table
+            #         old_value = q_table[state][action]
+            #         future_max = max(q_table[new_state].values())
 
-                    new_value = (1 - alpha) * old_value + alpha * (reward + gamma * future_max)
-                    q_table[state][action] = new_value
+            #         new_value = (1 - alpha) * old_value + alpha * (reward + gamma * future_max)
+            #         q_table[state][action] = new_value
 
-                    # Enregistrer la Q-table
-                    write_in_pickle_file(q_table, "q_table.pickle")
-                    # Mettre à jour l'état
-                    state = new_state
+            #         # Enregistrer la Q-table
+            #         write_in_pickle_file(q_table, "q_table.pickle")
+            #         # Mettre à jour l'état
+            #         state = new_state
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

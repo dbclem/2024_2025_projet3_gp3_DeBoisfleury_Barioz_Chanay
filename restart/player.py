@@ -19,7 +19,7 @@ class Player(pygame.sprite.Sprite):
 
         self.position = [x, y]
         self.old_position = self.position.copy() # copier l'ancienne position du joueur
-        self.speed = 16 # vitesse de deplacement du joueur
+        self.speed = 2 # vitesse de deplacement du joueur
 
     def save_location (self) : 
         self.old_position = self.position.copy()
@@ -39,16 +39,16 @@ class Player(pygame.sprite.Sprite):
             self.image.set_colorkey((0, 0, 0))
 
     def move_right(self):
-        self.position[0] += self.speed
+        self.position[0] += self.speed*8
         
     def move_left(self):
-        self.position[0] -= self.speed
+        self.position[0] -= self.speed*8
 
     def move_up(self):
-        self.position[1] -= self.speed
+        self.position[1] -= self.speed*8
 
     def move_down(self):
-        self.position[1] += self.speed  
+        self.position[1] += self.speed*8
 
 
 
