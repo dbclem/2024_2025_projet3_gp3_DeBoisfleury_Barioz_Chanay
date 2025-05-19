@@ -1,5 +1,6 @@
 import json
 import pickle
+import numpy as np
 
 """  json  """
 
@@ -11,6 +12,7 @@ def read_from_json_file(json_file_name):
             loaded_data = json.load(f)
         else:
             loaded_data = [] # si le fichier est vide
+ 
     return loaded_data
 
 def write_in_json_file ( data , json_file_name ):
@@ -33,6 +35,18 @@ def read_from_pickle_file(pickle_file_name):
 def write_in_pickle_file(q_table, pickle_file_name):
     with open(pickle_file_name, "wb") as f:
         pickle.dump(q_table, f)
+
+
+""" numpy """
+def read_from_numpy_file(numpy_file_name):
+    print("use fct : read_from_numpy_file")
+    data = np.load(numpy_file_name, allow_pickle=True)
+    return data
+
+def write_in_numpy_file(numpy_file_name, data): 
+    print("use fct : write_in_numpy_file")
+    np.save(numpy_file_name, data, allow_pickle=True)
+
 
 
 """projet"""
