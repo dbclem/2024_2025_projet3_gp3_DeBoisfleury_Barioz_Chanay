@@ -99,6 +99,9 @@ class Game :
     def input(self) : 
         key_pressed = pygame.key.get_pressed() # recuperer les touches pressées
         
+        if key_pressed[pygame.K_ESCAPE]: # si la touche echap est pressée
+            pygame.quit() # quitter le jeu
+
         if key_pressed[pygame.K_UP]: # si la touche haut est pressée
             for _ in range(8):
                 self.player.move_up() # deplacer le joueur vers le haut
@@ -216,13 +219,15 @@ class Game :
                 position_player = self.player.position # recuperer la position du joueur
                 print("position joueur : ", position_player)
                 state = (int(position_player[0]/16) + 1, int(position_player[1]/16) + 1) # recuperer la position du joueur
-                print("state : ", state)
                 done = False
                 # Initialiser la Q-table si elle n'existe pas
                 try:
                     q_table = read_from_numpy_file("q_table.npy")
                 except FileNotFoundError:
                     q_table = create_q_table(54, 54, actions)
+                except EOFError:
+                    q_table = create_q_table(54, 54, actions)
+                    print("--- \n Le fichier Q-table est corrompu, création d'une nouvelle table... \n ---")
 
                 while not done:
                     # Choisir une action (exploration ou exploitation)
@@ -249,6 +254,7 @@ class Game :
                     write_in_numpy_file("q_table.npy", q_table)
                     # Mettre à jour l'état
                     state = new_state
+                    print("state : ", state)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -268,4 +274,10 @@ class Game :
 
         pygame.quit()
         return running
+    
+
+
+    # WIP arreter l'execution du programme si apres le nombre d'episodes max
+    # comprendre pourquoi les states ne changent presque pas bouge pas ? bug ? 
+    # pouvoir ralentir les actions de l'ia pour comprendre ce qu'elle fait
 
