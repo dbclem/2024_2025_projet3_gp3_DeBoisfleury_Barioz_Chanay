@@ -102,25 +102,55 @@ class Game :
         key_pressed = pygame.key.get_pressed() # recuperer les touches pressées
         
         if key_pressed[pygame.K_UP]: # si la touche haut est pressée
-            self.player.move_up() # deplacer le joueur vers le haut
-            self.player.change_animation("up") # changer l'animation du joueur vers le haut
+            for _ in range(8):
+                self.player.move_up() # deplacer le joueur vers le haut
+                self.player.change_animation("up") # changer l'animation du joueur vers le haut
             self.current_episode = adding_one(self.current_episode) # ajouter 1 au nombre d'episodes
 
         elif key_pressed[pygame.K_DOWN]:
-            self.player.move_down() # deplacer le joueur vers le bas
-            self.player.change_animation("down") # changer l'animation du joueur vers le bas
+            for _ in range(8):
+                self.player.move_down() # deplacer le joueur vers le bas
+                self.player.change_animation("down") # changer l'animation du joueur vers le bas
             self.current_episode = adding_one(self.current_episode)
 
         elif key_pressed[pygame.K_LEFT]:
-            self.player.move_left()
-            self.player.change_animation("left") # changer l'animation du joueur vers la gauche
+            for _ in range(8):
+                self.player.move_left()
+                self.player.change_animation("left") # changer l'animation du joueur vers la gauche
             self.current_episode = adding_one(self.current_episode)
 
         elif key_pressed[pygame.K_RIGHT]:
-            self.player.move_right()
-            self.player.change_animation("right") # changer l'animation du joueur vers la droite
+            for _ in range(8):
+                self.player.move_right()
+                self.player.change_animation("right") # changer l'animation du joueur vers la droite
             self.current_episode = adding_one(self.current_episode)
 
+        # for event in pygame.event.get():
+        #     if event.type == pygame.KEYDOWN:
+                
+        #         if event.key == pygame.K_UP:
+        #             for _ in range(8):
+        #                 self.player.move_up()
+        #                 self.player.change_animation("up")
+        #             self.current_episode = adding_one(self.current_episode)
+                
+        #         elif event.key == pygame.K_DOWN:
+        #             for _ in range(8):
+        #                 self.player.move_down()
+        #                 self.player.change_animation("down")
+        #             self.current_episode = adding_one(self.current_episode)
+               
+        #         elif event.key == pygame.K_LEFT:
+        #             for _ in range(8):
+        #                 self.player.move_left()
+        #                 self.player.change_animation("left")
+        #             self.current_episode = adding_one(self.current_episode)
+               
+        #         elif event.key == pygame.K_RIGHT:
+        #             for _ in range(8):
+        #                 self.player.move_right()
+        #                 self.player.change_animation("right")
+        #             self.current_episode = adding_one(self.current_episode)
 
     def update(self):
         self.group.update() # mettre à jour le groupe de sprites        
