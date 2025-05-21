@@ -3,7 +3,7 @@ import pytmx
 import pyscroll
 import pytmx.util_pygame
 from player import Player   
-from q_table import create_q_table, find_biggest_q_value
+from q_table import create_q_table
 from tools import read_from_pickle_file, write_in_pickle_file
 import random
 from tools import adding_one
