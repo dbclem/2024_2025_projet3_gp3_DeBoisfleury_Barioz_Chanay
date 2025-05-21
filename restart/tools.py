@@ -39,12 +39,10 @@ def write_in_pickle_file(q_table, pickle_file_name):
 
 """ numpy """
 def read_from_numpy_file(numpy_file_name):
-    print("use fct : read_from_numpy_file")
     data = np.load(numpy_file_name, allow_pickle=True)
     return data
 
 def write_in_numpy_file(numpy_file_name, data): 
-    print("use fct : write_in_numpy_file")
     np.save(numpy_file_name, data, allow_pickle=True)
 
 
@@ -52,5 +50,18 @@ def write_in_numpy_file(numpy_file_name, data):
 """projet"""
 
 def adding_one(nombre):
-    print(nombre)
-    return nombre + 1 
+    print("episode :", nombre)
+    nombre += 1
+    return nombre
+
+def index_in_list(liste, element):
+    """
+    Renvoie l'index de l'élément dans la liste
+    """
+    if element not in liste:
+        print("L'élément n'est pas dans la liste")
+        return None
+    
+    for i in range(len(liste)):
+        if liste[i] == element:
+            return i

@@ -9,11 +9,12 @@ def create_q_table(largeur, hauteur, actions):
     """
     q_table = np.zeros((largeur, hauteur, len(actions)))
 
-    print("Q-table created with dimensions:", largeur, "x", hauteur)
+    print(" ---- \n Q-table created with dimensions:", largeur, "x", hauteur, "\n ----")
     return q_table
 
 def find_biggest_q_value_with_numpy(q_values):
     return np.argmax(q_values)  # retourne l'indice de la plus grande valeur
+
 
 
 

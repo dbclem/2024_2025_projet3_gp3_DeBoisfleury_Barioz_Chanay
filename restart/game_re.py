@@ -2,9 +2,10 @@ import pygame
 import pytmx  
 import pyscroll
 import pytmx.util_pygame
+import numpy as np
 from player import Player   
-from q_table import create_q_table
-from tools import read_from_pickle_file, write_in_pickle_file
+from q_table import create_q_table, find_biggest_q_value_with_numpy
+from tools import read_from_numpy_file, write_in_numpy_file, index_in_list
 import random
 from tools import adding_one
 
@@ -52,7 +53,7 @@ class Game :
             pygame.draw.line(self.screen, (255, 0, 0), (0, y), (self.screen.get_width(), y), 1)   
 
 
-    def appliquer_action(self, state,action): 
+    def appliquer_action(self, state, action): 
         x, y = state # recuperer la position du joueur
 
         if action == "up": # si l'action est de deplacer le joueur vers le haut
@@ -207,42 +208,49 @@ class Game :
 
             pygame.display.flip() # rafraichir l'ecran
 
-            # alpha = 0.1     # taux d'apprentissage
-            # gamma = 0.9     # facteur de récompense future
-            # epsilon = 0.1   # probabilité d'explorer plutôt que d'exploiter
-            # actions = ["up", "down", "left", "right"] # actions possibles
+ 
+            alpha = 0.1     # taux d'apprentissage
+            gamma = 0.9     # facteur de récompense future
+            epsilon = 0.1   # probabilité d'explorer plutôt que d'exploiter
+            actions = ["up", "down", "left", "right"] # actions possibles
 
 
-            # for episode in range(nb_episode_max):
-            #     state = self.player.position # position du joueur
-            #     done = False
-            #     # Initialiser la Q-table si elle n'existe pas
-            #     try:
-            #         q_table = read_from_pickle_file("q_table.pickle")
-            #     except FileNotFoundError:
-            #         q_table = create_q_table(50, 50, actions)
+            for episode in range(nb_episode_max):
+                position_player = self.player.position # recuperer la position du joueur
+                print("position joueur : ", position_player)
+                state = (int(position_player[0]/16) + 1, int(position_player[1]/16) + 1) # recuperer la position du joueur
+                print("state : ", state)
+                done = False
+                # Initialiser la Q-table si elle n'existe pas
+                try:
+                    q_table = read_from_numpy_file("q_table.npy")
+                except FileNotFoundError:
+                    q_table = create_q_table(54, 54, actions)
 
-            #     while not done:
-            #         # Choisir une action (exploration ou exploitation)
-            #         if random.uniform(0, 1) < epsilon:
-            #             action = random.choice(actions)
-            #         else:
-            #             action = find_biggest_q_value(q_table[state], key=q_table[state].get)
+                while not done:
+                    # Choisir une action (exploration ou exploitation)
+                    if random.uniform(0, 1) < (1 - epsilon ) :
+                        action = random.choice(actions)
+                        print("exploration :", action)
+                    else:
+                        action = find_biggest_q_value_with_numpy(q_table[state]) # choisir l'action avec la plus grande valeur Q
+                        print("exploitation :", action)
+                    # Appliquer l'action, obtenir le nouvel état et la récompense
+                    new_state, reward, done = self.appliquer_action(state, action)
 
-            #         # Appliquer l'action, obtenir le nouvel état et la récompense
-            #         new_state, reward, done = self.appliquer_action(state, action)
+                    action_index = index_in_list(actions, action) # recuperer l'indice de l'action choisie
 
-            #         # Mise à jour de la Q-table
-            #         old_value = q_table[state][action]
-            #         future_max = max(q_table[new_state].values())
+                    # Mise à jour de la Q-table
+                    old_value = q_table[state][action_index]
+                    future_max = np.argmax(q_table[new_state])
 
-            #         new_value = (1 - alpha) * old_value + alpha * (reward + gamma * future_max)
-            #         q_table[state][action] = new_value
+                    new_value = (1 - alpha) * old_value + alpha * (reward + gamma * future_max)
+                    q_table[state][action_index] = new_value
 
-            #         # Enregistrer la Q-table
-            #         write_in_pickle_file(q_table, "q_table.pickle")
-            #         # Mettre à jour l'état
-            #         state = new_state
+                    # Enregistrer la Q-table
+                    write_in_numpy_file("q_table.npy", q_table)
+                    # Mettre à jour l'état
+                    state = new_state
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
