@@ -60,32 +60,29 @@ class Game :
             self.player.move_up() # deplacer le joueur vers le haut
             self.player.change_animation("up") # changer l'animation du joueur vers le haut
             self.current_episode = adding_one(self.current_episode) # ajouter 1 au nombre d'episodes
-            new_state = (self.player.position[0], self.player.position[1]) # recuperer la nouvelle position du joueur
+            new_state = (int(self.player.position[0]/16) + 1 , int(self.player.position[1]/16) + 1) # recuperer la nouvelle position du joueur
             return new_state, -0.1, False # retourner la position du joueur, la recompense et si le jeu est fini
 
         elif action == "down": # si l'action est de deplacer le joueur vers le bas
             self.player.move_down() # deplacer le joueur vers le bas    
             self.player.change_animation("down")
             self.current_episode = adding_one(self.current_episode)
-            new_state = (self.player.position[0], self.player.position[1]) # recuperer la nouvelle position du joueur
+            new_state = (int(self.player.position[0]/16) + 1 , int(self.player.position[1]/16) + 1) # recuperer la nouvelle position du joueur
             return new_state, -0.1, False # retourner la position du joueur, la recompense et si le jeu est fini
 
         elif action == "left": # si l'action est de deplacer le joueur vers la gauche
             self.player.move_left() # deplacer le joueur vers la gauche
             self.player.change_animation("left")
             self.current_episode = adding_one(self.current_episode)
-            new_state = (self.player.position[0], self.player.position[1]) # recuperer la nouvelle position du joueur
+            new_state = (int(self.player.position[0]/16) + 1 , int(self.player.position[1]/16) + 1) # recuperer la nouvelle position du joueur
             return new_state, -0.1, False # retourner la position du joueur, la recompense et si le jeu est fini
-        
+
         elif action == "right": # si l'action est de deplacer le joueur vers la droite
             self.player.move_right() # deplacer le joueur vers la droite
             self.player.change_animation("right")
             self.current_episode = adding_one(self.current_episode)
-            new_state = (self.player.position[0], self.player.position[1]) # recuperer la nouvelle position du joueur
+            new_state = (int(self.player.position[0]/16) + 1 , int(self.player.position[1]/16) + 1) # recuperer la nouvelle position du joueur
             return new_state, -0.1, False # retourner la position du joueur, la recompense et si le jeu est fini
-
-        
-
 
 
         """ajouter une recompense en fonction de la distance entre le joueur et le but""" 
@@ -233,7 +230,8 @@ class Game :
                         action = random.choice(actions)
                         print("exploration :", action)
                     else:
-                        action = find_biggest_q_value_with_numpy(q_table[state]) # choisir l'action avec la plus grande valeur Q
+                        biggest_value_action = find_biggest_q_value_with_numpy(q_table[state]) # choisir l'action avec la plus grande valeur Q
+                        action = actions[biggest_value_action]
                         print("exploitation :", action)
                     # Appliquer l'action, obtenir le nouvel état et la récompense
                     new_state, reward, done = self.appliquer_action(state, action)
