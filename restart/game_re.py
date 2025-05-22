@@ -154,7 +154,7 @@ class Game :
         
         if key_pressed[pygame.K_i] :           
 
-            for _ in range(30):
+            for _ in range(10):
                 self.ia(self.nb_episode_max)  # lancer l'ia si la touche i est pressée
 
         if key_pressed[pygame.K_UP]: # si la touche haut est pressée
@@ -244,7 +244,7 @@ class Game :
 
         alpha = 0.1     # taux d'apprentissage
         gamma = 0.9     # facteur de récompense future
-        epsilon = 0.5   # probabilité d'explorer plutôt que d'exploiter
+        epsilon = 0.9  # probabilité d'explorer plutôt que d'exploiter
         actions = ["up", "down", "left", "right"] # actions possibles
         
         for episode in range(nb_episode_max):
