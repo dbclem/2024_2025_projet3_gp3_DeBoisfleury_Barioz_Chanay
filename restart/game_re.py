@@ -105,6 +105,9 @@ class Game :
         
         if key_pressed[pygame.K_ESCAPE]: # si la touche echap est pressée
             pygame.quit() # quitter le jeu
+        
+        if key_pressed[pygame.K_i] : 
+            self.ia(self.current_episode) # lancer l'ia si la touche i est pressée
 
         if key_pressed[pygame.K_UP]: # si la touche haut est pressée
             for _ in range(8):
@@ -163,7 +166,7 @@ class Game :
         #verif des collisions
         for sprite in self.group.sprites():
             if sprite.feet.collidelist(self.collision_rects) > -1: # -1 est la valeur de retour si il n'y a pas de collision
-                print("collision")
+                print("---\n collision")
                 sprite.move_back() # si le joueur touche un rectangle de collision, il revient à sa position précédente
            
             if sprite.feet.collidelist(self.goal_rects) > -1: # si le joueur touche un rectangle de but
@@ -187,6 +190,73 @@ class Game :
         print("nb episodes : ", nb_episodes)
         return nb_episodes
 
+    def ia (self, nb_episode_max):
+        alpha = 0.1     # taux d'apprentissage
+        gamma = 0.9     # facteur de récompense future
+        epsilon = 0.1   # probabilité d'explorer plutôt que d'exploiter
+        actions = ["up", "down", "left", "right"] # actions possibles
+        
+        for episode in range(nb_episode_max):
+            self.player.save_location() # sauvegarder la position du joueur
+            self.update()
+            self.group.center(self.player.rect) # centrer la camera sur le joueur
+            self.group.draw(self.screen) # dessiner le groupe de sprites sur l'ecran
+            self.show_grid() # afficher la grille de la carte
+            
+            # Afficher le nombre max d'épisodes en haut à gauche
+            font_episode_max = pygame.font.SysFont(None, 36)
+            max_episode_text = font_episode_max.render(f"Max Episodes: {nb_episode_max}", True, (0, 0, 0))
+            self.screen.blit(max_episode_text, (10, 40))
+            # Afficher le current_episode en haut à gauche
+            font_current_episode = pygame.font.SysFont(None, 36)
+            episode_text = font_current_episode.render(f"Episode: {self.current_episode}", True, (0, 0, 0))
+            self.screen.blit(episode_text, (10, 10))
+
+            pygame.display.flip() # rafraichir l'ecran
+
+
+            position_player = self.player.position # recuperer la position du joueur
+            print("position joueur : ", position_player)
+            state = (int(position_player[0]/16) + 1, int(position_player[1]/16) + 1) # recuperer la position du joueur
+            done = False
+            # Initialiser la Q-table si elle n'existe pas
+            try:
+                q_table = read_from_numpy_file("q_table.npy")
+            except FileNotFoundError:
+                q_table = create_q_table(54, 54, actions)
+            except EOFError:
+                q_table = create_q_table(54, 54, actions)
+                print("--- \n Le fichier Q-table est corrompu, création d'une nouvelle table... \n ---")
+
+            # Choisir une action (exploration ou exploitation)
+            if random.uniform(0, 1) < (1 - epsilon ) :
+                action = random.choice(actions)
+                print("exploration :", action)
+            else:
+                biggest_value_action = find_biggest_q_value_with_numpy(q_table[state]) # choisir l'action avec la plus grande valeur Q
+                action = actions[biggest_value_action]
+                print("--- \n exploitation :", action, "\n ---")
+            # Appliquer l'action, obtenir le nouvel état et la récompense
+
+            new_state, reward, done = self.appliquer_action(state, action)
+            self.update() # mettre à jour le groupe de sprites
+
+            action_index = index_in_list(actions, action) # recuperer l'indice de l'action choisie
+
+            # Mise à jour de la Q-table
+            old_value = q_table[state][action_index]
+            future_max = np.argmax(q_table[new_state])
+
+            new_value = (1 - alpha) * old_value + alpha * (reward + gamma * future_max)
+            q_table[state][action_index] = new_value
+
+            # Enregistrer la Q-table
+            write_in_numpy_file("q_table.npy", q_table)
+            # Mettre à jour l'état
+            state = new_state
+            print("state : ", state)
+
+
     def run(self):
 
         running = True
@@ -195,72 +265,24 @@ class Game :
 
         while running:
              
-            alpha = 0.1     # taux d'apprentissage
-            gamma = 0.9     # facteur de récompense future
-            epsilon = 0.1   # probabilité d'explorer plutôt que d'exploiter
-            actions = ["up", "down", "left", "right"] # actions possibles
+            self.player.save_location() # sauvegarder la position du joueur
+            self.input()
+            self.update()
+            self.group.center(self.player.rect) # centrer la camera sur le joueur
+            self.group.draw(self.screen) # dessiner le groupe de sprites sur l'ecran
+            self.show_grid() # afficher la grille de la carte
+            
+            # Afficher le nombre max d'épisodes en haut à gauche
+            font_episode_max = pygame.font.SysFont(None, 36)
+            max_episode_text = font_episode_max.render(f"Max Episodes: {nb_episode_max}", True, (0, 0, 0))
+            self.screen.blit(max_episode_text, (10, 40))
+            # Afficher le current_episode en haut à gauche
+            font_current_episode = pygame.font.SysFont(None, 36)
+            episode_text = font_current_episode.render(f"Episode: {self.current_episode}", True, (0, 0, 0))
+            self.screen.blit(episode_text, (10, 10))
 
-
-            for episode in range(nb_episode_max):
-
-                self.player.save_location() # sauvegarder la position du joueur
-                self.input()
-                self.update()
-                self.group.center(self.player.rect) # centrer la camera sur le joueur
-                self.group.draw(self.screen) # dessiner le groupe de sprites sur l'ecran
-                self.show_grid() # afficher la grille de la carte
-                
-                # Afficher le nombre max d'épisodes en haut à gauche
-                font_episode_max = pygame.font.SysFont(None, 36)
-                max_episode_text = font_episode_max.render(f"Max Episodes: {nb_episode_max}", True, (0, 0, 0))
-                self.screen.blit(max_episode_text, (10, 40))
-                # Afficher le current_episode en haut à gauche
-                font_current_episode = pygame.font.SysFont(None, 36)
-                episode_text = font_current_episode.render(f"Episode: {self.current_episode}", True, (0, 0, 0))
-                self.screen.blit(episode_text, (10, 10))
-
-                pygame.display.flip() # rafraichir l'ecran
-
-
-                position_player = self.player.position # recuperer la position du joueur
-                print("position joueur : ", position_player)
-                state = (int(position_player[0]/16) + 1, int(position_player[1]/16) + 1) # recuperer la position du joueur
-                done = False
-                # Initialiser la Q-table si elle n'existe pas
-                try:
-                    q_table = read_from_numpy_file("q_table.npy")
-                except FileNotFoundError:
-                    q_table = create_q_table(54, 54, actions)
-                except EOFError:
-                    q_table = create_q_table(54, 54, actions)
-                    print("--- \n Le fichier Q-table est corrompu, création d'une nouvelle table... \n ---")
-
-                # Choisir une action (exploration ou exploitation)
-                if random.uniform(0, 1) < (1 - epsilon ) :
-                    action = random.choice(actions)
-                    print("exploration :", action)
-                else:
-                    biggest_value_action = find_biggest_q_value_with_numpy(q_table[state]) # choisir l'action avec la plus grande valeur Q
-                    action = actions[biggest_value_action]
-                    print("--- \n exploitation :", action, "\n ---")
-                # Appliquer l'action, obtenir le nouvel état et la récompense
-                new_state, reward, done = self.appliquer_action(state, action)
-
-                action_index = index_in_list(actions, action) # recuperer l'indice de l'action choisie
-
-                # Mise à jour de la Q-table
-                old_value = q_table[state][action_index]
-                future_max = np.argmax(q_table[new_state])
-
-                new_value = (1 - alpha) * old_value + alpha * (reward + gamma * future_max)
-                q_table[state][action_index] = new_value
-
-                # Enregistrer la Q-table
-                write_in_numpy_file("q_table.npy", q_table)
-                # Mettre à jour l'état
-                state = new_state
-                print("state : ", state)
-
+            pygame.display.flip() # rafraichir l'ecran
+            
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
