@@ -57,29 +57,33 @@ class Game :
         x, y = state # recuperer la position du joueur
 
         if action == "up": # si l'action est de deplacer le joueur vers le haut
-            self.player.move_up() # deplacer le joueur vers le haut
-            self.player.change_animation("up") # changer l'animation du joueur vers le haut
+            for _ in range(8): # deplacer le joueur vers le haut
+                self.player.move_up() # deplacer le joueur vers le haut
+                self.player.change_animation("up") # changer l'animation du joueur vers le haut
             self.current_episode = adding_one(self.current_episode) # ajouter 1 au nombre d'episodes
             new_state = (int(self.player.position[0]/16) + 1 , int(self.player.position[1]/16) + 1) # recuperer la nouvelle position du joueur
             return new_state, -0.1, False # retourner la position du joueur, la recompense et si le jeu est fini
 
         elif action == "down": # si l'action est de deplacer le joueur vers le bas
-            self.player.move_down() # deplacer le joueur vers le bas    
-            self.player.change_animation("down")
+            for _ in range(8): # deplacer le joueur vers le bas
+                self.player.move_down() # deplacer le joueur vers le bas
+                self.player.change_animation("down") # changer l'animation du joueur vers le bas
             self.current_episode = adding_one(self.current_episode)
             new_state = (int(self.player.position[0]/16) + 1 , int(self.player.position[1]/16) + 1) # recuperer la nouvelle position du joueur
             return new_state, -0.1, False # retourner la position du joueur, la recompense et si le jeu est fini
 
         elif action == "left": # si l'action est de deplacer le joueur vers la gauche
-            self.player.move_left() # deplacer le joueur vers la gauche
-            self.player.change_animation("left")
+            for _ in range(8): # deplacer le joueur vers la gauche
+                self.player.move_left() # deplacer le joueur vers la gauche
+                self.player.change_animation("left") # changer l'animation du joueur vers la gauche
             self.current_episode = adding_one(self.current_episode)
             new_state = (int(self.player.position[0]/16) + 1 , int(self.player.position[1]/16) + 1) # recuperer la nouvelle position du joueur
             return new_state, -0.1, False # retourner la position du joueur, la recompense et si le jeu est fini
 
         elif action == "right": # si l'action est de deplacer le joueur vers la droite
-            self.player.move_right() # deplacer le joueur vers la droite
-            self.player.change_animation("right")
+            for _ in range(8): # deplacer le joueur vers la droite
+                self.player.move_right() # deplacer le joueur vers la droite
+                self.player.change_animation("right") # changer l'animation du joueur vers la droite
             self.current_episode = adding_one(self.current_episode)
             new_state = (int(self.player.position[0]/16) + 1 , int(self.player.position[1]/16) + 1) # recuperer la nouvelle position du joueur
             return new_state, -0.1, False # retourner la position du joueur, la recompense et si le jeu est fini
@@ -159,6 +163,7 @@ class Game :
         #verif des collisions
         for sprite in self.group.sprites():
             if sprite.feet.collidelist(self.collision_rects) > -1: # -1 est la valeur de retour si il n'y a pas de collision
+                print("collision")
                 sprite.move_back() # si le joueur touche un rectangle de collision, il revient à sa position précédente
            
             if sprite.feet.collidelist(self.goal_rects) > -1: # si le joueur touche un rectangle de but
@@ -189,26 +194,7 @@ class Game :
         time_clock = pygame.time.Clock() # horloge pour gerer le temps
 
         while running:
-            
-            self.player.save_location() # sauvegarder la position du joueur
-            self.input()
-            self.update()
-            self.group.center(self.player.rect) # centrer la camera sur le joueur
-            self.group.draw(self.screen) # dessiner le groupe de sprites sur l'ecran
-            self.show_grid() # afficher la grille de la carte
-            
-            # Afficher le nombre max d'épisodes en haut à gauche
-            font_episode_max = pygame.font.SysFont(None, 36)
-            max_episode_text = font_episode_max.render(f"Max Episodes: {nb_episode_max}", True, (0, 0, 0))
-            self.screen.blit(max_episode_text, (10, 40))
-            # Afficher le current_episode en haut à gauche
-            font_current_episode = pygame.font.SysFont(None, 36)
-            episode_text = font_current_episode.render(f"Episode: {self.current_episode}", True, (0, 0, 0))
-            self.screen.blit(episode_text, (10, 10))
-
-            pygame.display.flip() # rafraichir l'ecran
-
- 
+             
             alpha = 0.1     # taux d'apprentissage
             gamma = 0.9     # facteur de récompense future
             epsilon = 0.1   # probabilité d'explorer plutôt que d'exploiter
@@ -216,6 +202,26 @@ class Game :
 
 
             for episode in range(nb_episode_max):
+
+                self.player.save_location() # sauvegarder la position du joueur
+                self.input()
+                self.update()
+                self.group.center(self.player.rect) # centrer la camera sur le joueur
+                self.group.draw(self.screen) # dessiner le groupe de sprites sur l'ecran
+                self.show_grid() # afficher la grille de la carte
+                
+                # Afficher le nombre max d'épisodes en haut à gauche
+                font_episode_max = pygame.font.SysFont(None, 36)
+                max_episode_text = font_episode_max.render(f"Max Episodes: {nb_episode_max}", True, (0, 0, 0))
+                self.screen.blit(max_episode_text, (10, 40))
+                # Afficher le current_episode en haut à gauche
+                font_current_episode = pygame.font.SysFont(None, 36)
+                episode_text = font_current_episode.render(f"Episode: {self.current_episode}", True, (0, 0, 0))
+                self.screen.blit(episode_text, (10, 10))
+
+                pygame.display.flip() # rafraichir l'ecran
+
+
                 position_player = self.player.position # recuperer la position du joueur
                 print("position joueur : ", position_player)
                 state = (int(position_player[0]/16) + 1, int(position_player[1]/16) + 1) # recuperer la position du joueur
@@ -229,32 +235,31 @@ class Game :
                     q_table = create_q_table(54, 54, actions)
                     print("--- \n Le fichier Q-table est corrompu, création d'une nouvelle table... \n ---")
 
-                while not done:
-                    # Choisir une action (exploration ou exploitation)
-                    if random.uniform(0, 1) < (1 - epsilon ) :
-                        action = random.choice(actions)
-                        print("exploration :", action)
-                    else:
-                        biggest_value_action = find_biggest_q_value_with_numpy(q_table[state]) # choisir l'action avec la plus grande valeur Q
-                        action = actions[biggest_value_action]
-                        print("exploitation :", action)
-                    # Appliquer l'action, obtenir le nouvel état et la récompense
-                    new_state, reward, done = self.appliquer_action(state, action)
+                # Choisir une action (exploration ou exploitation)
+                if random.uniform(0, 1) < (1 - epsilon ) :
+                    action = random.choice(actions)
+                    print("exploration :", action)
+                else:
+                    biggest_value_action = find_biggest_q_value_with_numpy(q_table[state]) # choisir l'action avec la plus grande valeur Q
+                    action = actions[biggest_value_action]
+                    print("--- \n exploitation :", action, "\n ---")
+                # Appliquer l'action, obtenir le nouvel état et la récompense
+                new_state, reward, done = self.appliquer_action(state, action)
 
-                    action_index = index_in_list(actions, action) # recuperer l'indice de l'action choisie
+                action_index = index_in_list(actions, action) # recuperer l'indice de l'action choisie
 
-                    # Mise à jour de la Q-table
-                    old_value = q_table[state][action_index]
-                    future_max = np.argmax(q_table[new_state])
+                # Mise à jour de la Q-table
+                old_value = q_table[state][action_index]
+                future_max = np.argmax(q_table[new_state])
 
-                    new_value = (1 - alpha) * old_value + alpha * (reward + gamma * future_max)
-                    q_table[state][action_index] = new_value
+                new_value = (1 - alpha) * old_value + alpha * (reward + gamma * future_max)
+                q_table[state][action_index] = new_value
 
-                    # Enregistrer la Q-table
-                    write_in_numpy_file("q_table.npy", q_table)
-                    # Mettre à jour l'état
-                    state = new_state
-                    print("state : ", state)
+                # Enregistrer la Q-table
+                write_in_numpy_file("q_table.npy", q_table)
+                # Mettre à jour l'état
+                state = new_state
+                print("state : ", state)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

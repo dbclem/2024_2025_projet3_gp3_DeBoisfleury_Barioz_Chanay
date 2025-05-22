@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="54" height="54" tilewidth="16" tileheight="16" infinite="0" nextlayerid="15" nextobjectid="82">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="54" height="54" tilewidth="16" tileheight="16" infinite="0" nextlayerid="15" nextobjectid="83">
  <tileset firstgid="1" source="RPG Nature Tileset.tsx"/>
  <tileset firstgid="721" source="house.tsx"/>
  <objectgroup id="11" name="bordure">
-  <object id="34" type="collision" x="11.2397" y="831.741" width="830.617" height="10.1158"/>
   <object id="36" type="collision" x="12.3637" y="25.8514" width="19.1076" height="812.633"/>
   <object id="38" type="collision" x="24.7274" y="19.1076" width="822.749" height="11.2397"/>
   <object id="39" type="collision" x="831.741" y="21.3555" width="8.99179" height="829.493"/>
@@ -32,6 +31,7 @@
   <object id="73" type="collision" x="29.266" y="495.634" width="186.925" height="15.105"/>
   <object id="74" type="collision" x="432.381" y="467.312" width="12.2728" height="55.6998"/>
   <object id="75" type="collision" x="351.192" y="468.256" width="14.161" height="54.7557"/>
+  <object id="82" type="collision" x="0" y="833" width="863" height="31"/>
  </objectgroup>
  <layer id="1" name="riviere + pont" width="54" height="54">
   <data encoding="csv">
