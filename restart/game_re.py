@@ -66,22 +66,22 @@ class Game :
         # Récupérer la position du goal (on prend le centre du premier goal_rect)
         d_manhattan_player_goal = abs(int(pos_x - pos_goal_x)) + abs(int(pos_y - pos_goal_y))
         if d_manhattan_player_goal < self.d_manhattan_init_goal/5:
-            d_reward = 5
+            d_reward = 8
             print(d_reward)
             if d_manhattan_player_goal < self.d_manhattan_init_goal/5*2:
-                d_reward = 3
+                d_reward = 5
                 print(d_reward)
                 if d_manhattan_player_goal < self.d_manhattan_init_goal/5*3:
-                    d_reward = 1
+                    d_reward = 3
                     print(d_reward)
                     if d_manhattan_player_goal < self.d_manhattan_init_goal/5*4:
-                        d_reward = 0.5
+                        d_reward = 1
                         print(d_reward)
                         if d_manhattan_player_goal < self.d_manhattan_init_goal:
-                            d_reward = 0.1
+                            d_reward = -1
                             print(d_reward)
                             if d_manhattan_player_goal > self.d_manhattan_init_goal:
-                                d_reward = -0.5
+                                d_reward = -5
                                 print(d_reward)
 
         for sprite in self.group.sprites():
@@ -152,8 +152,17 @@ class Game :
         if key_pressed[pygame.K_ESCAPE]: # si la touche echap est pressée
             pygame.quit() # quitter le jeu
         
-        if key_pressed[pygame.K_i] : 
-            self.ia(self.nb_episode_max)  # lancer l'ia si la touche i est pressée
+        if key_pressed[pygame.K_i] :           
+
+            for _ in range(30):
+                self.ia(self.nb_episode_max)  # lancer l'ia si la touche i est pressée
+            
+            try : 
+                qtable_test_open = read_from_numpy_file("q_table.npy")
+                print(" ---- \n Q-table loaded \n ----")
+            except FileNotFoundError:
+                qtable_test_open = create_q_table(54, 54, ["up", "down", "left", "right"])
+                print(" ---- \n Q-table created \n ----")
 
         if key_pressed[pygame.K_UP]: # si la touche haut est pressée
             for _ in range(8):
@@ -238,6 +247,7 @@ class Game :
     def ia (self, nb_episode_max):
 
         self.current_episode = 0 # initialiser le nombre d'episodes
+        self.player.position = [390, 783]  # remettre le joueur à sa position d'origine
 
         alpha = 0.1     # taux d'apprentissage
         gamma = 0.9     # facteur de récompense future
@@ -269,6 +279,7 @@ class Game :
             # Initialiser la Q-table si elle n'existe pas
             try:
                 q_table = read_from_numpy_file("q_table.npy")
+                print(" ---- \n Q-table loaded \n ----")
             except FileNotFoundError:
                 q_table = create_q_table(54, 54, actions)
             except EOFError:
