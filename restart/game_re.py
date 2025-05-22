@@ -156,13 +156,6 @@ class Game :
 
             for _ in range(30):
                 self.ia(self.nb_episode_max)  # lancer l'ia si la touche i est pressée
-            
-            try : 
-                qtable_test_open = read_from_numpy_file("q_table.npy")
-                print(" ---- \n Q-table loaded \n ----")
-            except FileNotFoundError:
-                qtable_test_open = create_q_table(54, 54, ["up", "down", "left", "right"])
-                print(" ---- \n Q-table created \n ----")
 
         if key_pressed[pygame.K_UP]: # si la touche haut est pressée
             for _ in range(8):
@@ -362,7 +355,5 @@ class Game :
     
 
 
-    # WIP arreter l'execution du programme si apres le nombre d'episodes max
-    # comprendre pourquoi les states ne changent presque pas bouge pas ? bug ? 
-    # pouvoir ralentir les actions de l'ia pour comprendre ce qu'elle fait
+    # WIP ajuster les recompenses en 10eme plutot qu'en 5eme
 
