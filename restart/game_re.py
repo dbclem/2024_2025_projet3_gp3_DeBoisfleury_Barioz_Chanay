@@ -41,8 +41,9 @@ class Game :
         self.group = pyscroll.PyscrollGroup(map_layer=map_layer, default_layer=3) # group de sprites
         self.group.add(self.player) # ajouter le joueur au groupe de sprites
 
+        self.d_manhattan_init_goal = abs(self.player.position[1] - self.goal_rects[0].y) + abs(self.player.position[0] - self.goal_rects[0].x)
         self.current_episode = 0 # initialiser le nombre d'episodes
-        self.nb_episode_max = self.episode(self.player.position[0], self.player.position[1], 510, 175)
+        self.nb_episode_max = self.episode()
 
     def show_grid(self):
         """
@@ -54,8 +55,55 @@ class Game :
             pygame.draw.line(self.screen, (255, 0, 0), (0, y), (self.screen.get_width(), y), 1)   
 
 
+    def def_reward (self, reward) : 
+        d_reward = 0
+        self.group.update()
+        print("fct reward")
+        # Récupérer la position du joueur (centre du rect)
+        pos_x, pos_y = self.player.position[0], self.player.position[1]
+        pos_goal_x , pos_goal_y = self.goal_rects[0].x, self.goal_rects[0].y
+
+        # Récupérer la position du goal (on prend le centre du premier goal_rect)
+        d_manhattan_player_goal = abs(int(pos_x - pos_goal_x)) + abs(int(pos_y - pos_goal_y))
+        if d_manhattan_player_goal < self.d_manhattan_init_goal/5:
+            d_reward = 5
+            print(d_reward)
+            if d_manhattan_player_goal < self.d_manhattan_init_goal/5*2:
+                d_reward = 3
+                print(d_reward)
+                if d_manhattan_player_goal < self.d_manhattan_init_goal/5*3:
+                    d_reward = 1
+                    print(d_reward)
+                    if d_manhattan_player_goal < self.d_manhattan_init_goal/5*4:
+                        d_reward = 0.5
+                        print(d_reward)
+                        if d_manhattan_player_goal < self.d_manhattan_init_goal:
+                            d_reward = 0.1
+                            print(d_reward)
+                            if d_manhattan_player_goal > self.d_manhattan_init_goal:
+                                d_reward = -0.5
+                                print(d_reward)
+
+        for sprite in self.group.sprites():
+            if sprite.feet.collidelist(self.collision_rects) > -1: # -1 est la valeur de retour si il n'y a pas de collision
+                print("------- collision -------")
+                coll_reward = -10
+                print(coll_reward)
+            if sprite.feet.collidelist(self.goal_rects) > -1 : 
+                print("------- but -------")
+                coll_reward = 10
+                print(coll_reward)
+            else :
+                coll_reward = -0.1
+                print("------- rien -------")
+                print(coll_reward)
+        
+        reward = d_reward + coll_reward # recompense finale
+        print("reward : ", reward)
+        return reward
+    
     def appliquer_action(self, state, action): 
-        x, y = state # recuperer la position du joueur
+        reward = 0 
 
         if action == "up": # si l'action est de deplacer le joueur vers le haut
             for _ in range(8): # deplacer le joueur vers le haut
@@ -63,7 +111,8 @@ class Game :
                 self.player.change_animation("up") # changer l'animation du joueur vers le haut
             self.current_episode = adding_one(self.current_episode) # ajouter 1 au nombre d'episodes
             new_state = (int(self.player.position[0]/16) + 1 , int(self.player.position[1]/16) + 1) # recuperer la nouvelle position du joueur
-            return new_state, -0.1, False # retourner la position du joueur, la recompense et si le jeu est fini
+            reward = self.def_reward(reward)     
+            return new_state, reward # retourner la position du joueur, la recompense et si le jeu est fini
 
         elif action == "down": # si l'action est de deplacer le joueur vers le bas
             for _ in range(8): # deplacer le joueur vers le bas
@@ -71,7 +120,8 @@ class Game :
                 self.player.change_animation("down") # changer l'animation du joueur vers le bas
             self.current_episode = adding_one(self.current_episode)
             new_state = (int(self.player.position[0]/16) + 1 , int(self.player.position[1]/16) + 1) # recuperer la nouvelle position du joueur
-            return new_state, -0.1, False # retourner la position du joueur, la recompense et si le jeu est fini
+            reward = self.def_reward(reward)
+            return new_state, reward # retourner la position du joueur, la recompense et si le jeu est fini
 
         elif action == "left": # si l'action est de deplacer le joueur vers la gauche
             for _ in range(8): # deplacer le joueur vers la gauche
@@ -79,7 +129,8 @@ class Game :
                 self.player.change_animation("left") # changer l'animation du joueur vers la gauche
             self.current_episode = adding_one(self.current_episode)
             new_state = (int(self.player.position[0]/16) + 1 , int(self.player.position[1]/16) + 1) # recuperer la nouvelle position du joueur
-            return new_state, -0.1, False # retourner la position du joueur, la recompense et si le jeu est fini
+            reward = self.def_reward(reward)
+            return new_state, reward # retourner la position du joueur, la recompense et si le jeu est fini
 
         elif action == "right": # si l'action est de deplacer le joueur vers la droite
             for _ in range(8): # deplacer le joueur vers la droite
@@ -87,17 +138,11 @@ class Game :
                 self.player.change_animation("right") # changer l'animation du joueur vers la droite
             self.current_episode = adding_one(self.current_episode)
             new_state = (int(self.player.position[0]/16) + 1 , int(self.player.position[1]/16) + 1) # recuperer la nouvelle position du joueur
-            return new_state, -0.1, False # retourner la position du joueur, la recompense et si le jeu est fini
+            reward = self.def_reward(reward)
+            return new_state, reward # retourner la position du joueur, la recompense et si le jeu est fini
 
-
-        """ajouter une recompense en fonction de la distance entre le joueur et le but""" 
-        for sprite in self.group.sprites():
-            if sprite.feet.collidelist(self.collision_rects) > -1: # -1 est la valeur de retour si il n'y a pas de collision*
-                return state, -1, False 
-            if sprite.feet.collidelist(self.goal_rects) > -1: # si le joueur touche un rectangle de but
-                return (x, y), 10, True # retourner la position du joueur, la recompense et si le jeu est fini
             
-        return state, -0.1, False # mouvement normal, petite punition pour encourager l’efficacité
+        return state, -0.1 # mouvement normal, petite punition pour encourager l’efficacité
 
 
 
@@ -180,15 +225,15 @@ class Game :
                 self.current_episode = 0 
 
 
-    def episode(self, init_x, init_y, goal_x, goal_y):
+    def episode(self):
         """
         Calculer le nombre d'episodes en fonction de la distance entre le joueur et le but
         """
         multiplicateur_d_min = 0.35
-        d_manhattan = abs(init_y - init_x) + abs(goal_y - goal_x)
-        nb_episodes = int( ( int(d_manhattan) + int(d_manhattan) * multiplicateur_d_min) // 16) 
+        nb_episodes = int( ( int(self.d_manhattan_init_goal) + int(self.d_manhattan_init_goal) * multiplicateur_d_min) // 16) 
         print("nb episodes : ", nb_episodes)
         return nb_episodes
+
 
     def ia (self, nb_episode_max):
 
@@ -196,7 +241,7 @@ class Game :
 
         alpha = 0.1     # taux d'apprentissage
         gamma = 0.9     # facteur de récompense future
-        epsilon = 0.1   # probabilité d'explorer plutôt que d'exploiter
+        epsilon = 0.5   # probabilité d'explorer plutôt que d'exploiter
         actions = ["up", "down", "left", "right"] # actions possibles
         
         for episode in range(nb_episode_max):
@@ -221,7 +266,6 @@ class Game :
             position_player = self.player.position # recuperer la position du joueur
             print("position joueur : ", position_player)
             state = (int(position_player[0]/16) + 1, int(position_player[1]/16) + 1) # recuperer la position du joueur
-            done = False
             # Initialiser la Q-table si elle n'existe pas
             try:
                 q_table = read_from_numpy_file("q_table.npy")
@@ -241,8 +285,9 @@ class Game :
                 print("--- \n exploitation :", action, "\n ---")
             # Appliquer l'action, obtenir le nouvel état et la récompense
 
-            new_state, reward, done = self.appliquer_action(state, action)
+            new_state, reward = self.appliquer_action(state, action)
             self.update() # mettre à jour le groupe de sprites
+            # def_final_reward_after_action = reward_after_action (reward)
 
             action_index = index_in_list(actions, action) # recuperer l'indice de l'action choisie
 
