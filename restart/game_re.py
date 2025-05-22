@@ -42,6 +42,7 @@ class Game :
         self.group.add(self.player) # ajouter le joueur au groupe de sprites
 
         self.current_episode = 0 # initialiser le nombre d'episodes
+        self.nb_episode_max = self.episode(self.player.position[0], self.player.position[1], 510, 175)
 
     def show_grid(self):
         """
@@ -107,7 +108,7 @@ class Game :
             pygame.quit() # quitter le jeu
         
         if key_pressed[pygame.K_i] : 
-            self.ia(self.current_episode) # lancer l'ia si la touche i est pressée
+            self.ia(self.nb_episode_max)  # lancer l'ia si la touche i est pressée
 
         if key_pressed[pygame.K_UP]: # si la touche haut est pressée
             for _ in range(8):
@@ -166,7 +167,6 @@ class Game :
         #verif des collisions
         for sprite in self.group.sprites():
             if sprite.feet.collidelist(self.collision_rects) > -1: # -1 est la valeur de retour si il n'y a pas de collision
-                print("---\n collision")
                 sprite.move_back() # si le joueur touche un rectangle de collision, il revient à sa position précédente
            
             if sprite.feet.collidelist(self.goal_rects) > -1: # si le joueur touche un rectangle de but
@@ -191,6 +191,9 @@ class Game :
         return nb_episodes
 
     def ia (self, nb_episode_max):
+
+        self.current_episode = 0 # initialiser le nombre d'episodes
+
         alpha = 0.1     # taux d'apprentissage
         gamma = 0.9     # facteur de récompense future
         epsilon = 0.1   # probabilité d'explorer plutôt que d'exploiter
@@ -260,7 +263,6 @@ class Game :
     def run(self):
 
         running = True
-        nb_episode_max = self.episode(self.player.position[0], self.player.position[1], 510, 175)
         time_clock = pygame.time.Clock() # horloge pour gerer le temps
 
         while running:
@@ -274,7 +276,7 @@ class Game :
             
             # Afficher le nombre max d'épisodes en haut à gauche
             font_episode_max = pygame.font.SysFont(None, 36)
-            max_episode_text = font_episode_max.render(f"Max Episodes: {nb_episode_max}", True, (0, 0, 0))
+            max_episode_text = font_episode_max.render(f"Max Episodes: {self.nb_episode_max}", True, (0, 0, 0))
             self.screen.blit(max_episode_text, (10, 40))
             # Afficher le current_episode en haut à gauche
             font_current_episode = pygame.font.SysFont(None, 36)
@@ -287,7 +289,7 @@ class Game :
                 if event.type == pygame.QUIT:
                     running = False
 
-            if self.current_episode >= nb_episode_max:
+            if self.current_episode >= self.nb_episode_max:
                 font_game_over = pygame.font.SysFont(None, 60)
                 text_game_over = font_game_over.render("GAME OVER", True, (255, 0, 0))
                 text_rect = text_game_over.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 2))
