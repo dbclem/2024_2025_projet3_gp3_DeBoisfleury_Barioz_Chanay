@@ -65,36 +65,43 @@ class Game :
 
         # Récupérer la position du goal (on prend le centre du premier goal_rect)
         d_manhattan_player_goal = abs(int(pos_x - pos_goal_x)) + abs(int(pos_y - pos_goal_y))
-        if d_manhattan_player_goal < self.d_manhattan_init_goal/5:
-            d_reward = 8
-            print(d_reward)
-            if d_manhattan_player_goal < self.d_manhattan_init_goal/5*2:
-                d_reward = 5
-                print(d_reward)
-                if d_manhattan_player_goal < self.d_manhattan_init_goal/5*3:
-                    d_reward = 3
-                    print(d_reward)
-                    if d_manhattan_player_goal < self.d_manhattan_init_goal/5*4:
-                        d_reward = 1
-                        print(d_reward)
-                        if d_manhattan_player_goal < self.d_manhattan_init_goal:
-                            d_reward = -1
-                            print(d_reward)
-                            if d_manhattan_player_goal > self.d_manhattan_init_goal:
-                                d_reward = -5
-                                print(d_reward)
+        # Décomposition plus précise et logique des rewards basée sur la distance de Manhattan
+        ratio = d_manhattan_player_goal / self.d_manhattan_init_goal
+
+        if ratio < 0.1:
+            d_reward = 10  # Très proche du but
+            print("Reward: Très proche du but", d_reward)
+        elif ratio < 0.2:
+            d_reward = 7
+            print("Reward: Proche du but", d_reward)
+        elif ratio < 0.4:
+            d_reward = 4
+            print("Reward: Moyennement proche", d_reward)
+        elif ratio < 0.6:
+            d_reward = 1
+            print("Reward: Assez loin", d_reward)
+        elif ratio < 0.8:
+            d_reward = -1
+            print("Reward: Loin", d_reward)
+        elif ratio <= 1.0:
+            d_reward = -3
+            print("Reward: Très loin", d_reward)
+        else:
+            d_reward = -8  # Plus loin qu'au départ (s'éloigne du but)
+            print("Reward: S'éloigne du but", d_reward)
+
+        coll_reward = -0.1  # Par défaut, légère pénalité pour chaque mouvement
 
         for sprite in self.group.sprites():
-            if sprite.feet.collidelist(self.collision_rects) > -1: # -1 est la valeur de retour si il n'y a pas de collision
+            if sprite.feet.collidelist(self.collision_rects) > -1:
                 print("------- collision -------")
-                coll_reward = -10
+                coll_reward = -5  # Pénalité plus faible pour collision
                 print(coll_reward)
-            if sprite.feet.collidelist(self.goal_rects) > -1 : 
+            elif sprite.feet.collidelist(self.goal_rects) > -1:
                 print("------- but -------")
-                coll_reward = 10
+                coll_reward = 20  # Plus grande récompense pour atteindre le but
                 print(coll_reward)
-            else :
-                coll_reward = -0.1
+            else:
                 print("------- rien -------")
                 print(coll_reward)
         
@@ -244,7 +251,7 @@ class Game :
 
         alpha = 0.1     # taux d'apprentissage
         gamma = 0.9     # facteur de récompense future
-        epsilon = 0.9  # probabilité d'explorer plutôt que d'exploiter
+        epsilon = 0.5  # probabilité d'explorer plutôt que d'exploiter
         actions = ["up", "down", "left", "right"] # actions possibles
         
         for episode in range(nb_episode_max):

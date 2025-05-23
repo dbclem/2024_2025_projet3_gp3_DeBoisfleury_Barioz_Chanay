@@ -198,7 +198,7 @@ class Game :
 
                     # Mise à jour de la Q-table
                     old_value = q_table[state][action]
-                    future_max = np.argmax(q_table[new_state].values())
+                    future_max = np.argmax(q_table[new_state].values()) # WIP 
 
                     new_value = (1 - alpha) * old_value + alpha * (reward + gamma * future_max)
                     q_table[state][action] = new_value
