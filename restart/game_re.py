@@ -148,10 +148,6 @@ class Game :
             reward = self.def_reward(reward)
             return new_state, reward # retourner la position du joueur, la recompense et si le jeu est fini
 
-            
-        return state, -0.1 # mouvement normal, petite punition pour encourager l’efficacité
-
-
 
     def input(self) : 
         key_pressed = pygame.key.get_pressed() # recuperer les touches pressées
@@ -160,9 +156,12 @@ class Game :
             pygame.quit() # quitter le jeu
         
         if key_pressed[pygame.K_i] :           
+            self.ia(self.nb_episode_max)  # lancer l'ia si la touche i est pressée
 
+        # Si Ctrl+I est pressé, lancer l'IA en mode exploration
+        if key_pressed[pygame.K_e]:
             for _ in range(20):
-                self.ia(self.nb_episode_max)  # lancer l'ia si la touche i est pressée
+                self.ia(500)  # lancer l'ia en mode exploration si la touche e est pressée
 
         if key_pressed[pygame.K_UP]: # si la touche haut est pressée
             for _ in range(8):
@@ -188,32 +187,6 @@ class Game :
                 self.player.change_animation("right") # changer l'animation du joueur vers la droite
             self.current_episode = adding_one(self.current_episode)
 
-        # for event in pygame.event.get():
-        #     if event.type == pygame.KEYDOWN:
-                
-        #         if event.key == pygame.K_UP:
-        #             for _ in range(8):
-        #                 self.player.move_up()
-        #                 self.player.change_animation("up")
-        #             self.current_episode = adding_one(self.current_episode)
-                
-        #         elif event.key == pygame.K_DOWN:
-        #             for _ in range(8):
-        #                 self.player.move_down()
-        #                 self.player.change_animation("down")
-        #             self.current_episode = adding_one(self.current_episode)
-               
-        #         elif event.key == pygame.K_LEFT:
-        #             for _ in range(8):
-        #                 self.player.move_left()
-        #                 self.player.change_animation("left")
-        #             self.current_episode = adding_one(self.current_episode)
-               
-        #         elif event.key == pygame.K_RIGHT:
-        #             for _ in range(8):
-        #                 self.player.move_right()
-        #                 self.player.change_animation("right")
-        #             self.current_episode = adding_one(self.current_episode)
 
     def update(self):
         self.group.update() # mettre à jour le groupe de sprites        
@@ -251,10 +224,16 @@ class Game :
 
         alpha = 0.1     # taux d'apprentissage
         gamma = 0.9     # facteur de récompense future
-        epsilon = 0.5  # probabilité d'explorer plutôt que d'exploiter
+        epsilon = 1  # probabilité d'explorer plutôt que d'exploiter
         actions = ["up", "down", "left", "right"] # actions possibles
         
+    
         for episode in range(nb_episode_max):
+            # Réduire epsilon de 0.1 tous les 100 épisodes après 1000
+            if episode > 1000 and episode % 100 == 0 and epsilon > 0:
+                epsilon = max(0, epsilon - 0.1)
+                print(f"Nouvel epsilon: {epsilon}")
+                
             self.player.save_location() # sauvegarder la position du joueur
             self.update()
             self.group.center(self.player.rect) # centrer la camera sur le joueur
@@ -287,7 +266,7 @@ class Game :
                 print("--- \n Le fichier Q-table est corrompu, création d'une nouvelle table... \n ---")
 
             # Choisir une action (exploration ou exploitation)
-            if random.uniform(0, 1) < (1 - epsilon ) :
+            if random.uniform(0, 1) < epsilon  :
                 action = random.choice(actions)
                 print("exploration :", action)
             else:
@@ -306,7 +285,7 @@ class Game :
             old_value = q_table[state][action_index]
             future_max = np.argmax(q_table[new_state])
 
-            new_value = (1 - alpha) * old_value + alpha * (reward + gamma * future_max)
+            new_value =  alpha* old_value +  (1 - alpha)* (reward + gamma * future_max)
             q_table[state][action_index] = new_value
 
             # Enregistrer la Q-table
@@ -362,5 +341,5 @@ class Game :
     
 
 
-    # WIP ajuster les recompenses en 10eme plutot qu'en 5eme
+    # FAIRE TOURNER LE JEU AVEC LA BOUCLE PLUS DE 2000 FOIS 
 
