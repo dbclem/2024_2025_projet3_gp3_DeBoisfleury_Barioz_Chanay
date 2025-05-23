@@ -161,7 +161,7 @@ class Game :
         
         if key_pressed[pygame.K_i] :           
 
-            for _ in range(10):
+            for _ in range(20):
                 self.ia(self.nb_episode_max)  # lancer l'ia si la touche i est pressée
 
         if key_pressed[pygame.K_UP]: # si la touche haut est pressée
