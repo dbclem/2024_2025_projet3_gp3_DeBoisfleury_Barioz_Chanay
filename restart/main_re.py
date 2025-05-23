@@ -8,7 +8,7 @@ if __name__ == "__main__":
     game = Game()
     game.run()
     q_table = read_from_numpy_file("q_table.npy")
-    state = (22, 48)
+    state = (26, 48)
     # Affiche les valeurs Q pour les états proches de (22, 48)
     for i in range(state[0] - 2, state[0] + 3):
         for j in range(state[1] - 2, state[1] + 3):
