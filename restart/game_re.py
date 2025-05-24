@@ -243,7 +243,7 @@ class Game :
         self.current_episode = 0 # initialiser le nombre d'episodes
         self.player.position = [390, 783]  # remettre le joueur à sa position d'origine
 
-        alpha = 0.5    # taux d'apprentissage
+        alpha = 0.1   # taux d'apprentissage
         gamma = 0.99   # facteur de récompense future
         epsilon = 1    # probabilité d'explorer plutôt que d'exploiter
         actions = ["up", "down", "left", "right"] # actions possibles
