@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="54" height="54" tilewidth="16" tileheight="16" infinite="0" nextlayerid="15" nextobjectid="88">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="54" height="54" tilewidth="16" tileheight="16" infinite="0" nextlayerid="18" nextobjectid="89">
  <tileset firstgid="1" source="RPG Nature Tileset.tsx"/>
  <tileset firstgid="721" source="house.tsx"/>
  <objectgroup id="11" name="bordure">
@@ -332,6 +332,11 @@
  <objectgroup id="10" name="player">
   <object id="81" name="player" x="392" y="776">
    <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="17" name="zones bonus" class="bonus ">
+  <object id="88" x="368.091" y="464.091">
+   <polygon points="0,0 63.7841,0.0340909 63.4091,63.9091 -0.0909091,64.1591"/>
   </object>
  </objectgroup>
 </map>

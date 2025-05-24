@@ -31,12 +31,15 @@ class Game :
         # definir une lsite qui stock les rectangles de collision
         self.collision_rects = []
         self.goal_rects = []
+        self.zones_bonus_rects = []
         for obj in tmx_data.objects: # pour chaque objet de la carte
             if obj.type == "collision":
                 self.collision_rects.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height)) # recuperer les rectangles de collision
             elif obj.type == "goal": # si l'objet est un but
                 self.goal_rects.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height)) # recuperer les rectangles de but
-        
+            elif obj.type == "bonus": # si l'objet est un bonus
+                self.zones_bonus_rects.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height)) # recuperer les rectangles de bonus
+
         # charger les calques de la carte
         self.group = pyscroll.PyscrollGroup(map_layer=map_layer, default_layer=3) # group de sprites
         self.group.add(self.player) # ajouter le joueur au groupe de sprites
@@ -68,39 +71,57 @@ class Game :
         # Décomposition plus précise et logique des rewards basée sur la distance de Manhattan
         ratio = d_manhattan_player_goal / self.d_manhattan_init_goal
 
-        if ratio < 0.1:
-            d_reward = 10  # Très proche du but
+        if ratio < 0.05:
+            d_reward = 15  # Extrêmement proche du but (récompense augmentée)
+            print("Reward: Extrêmement proche du but", d_reward)
+        elif ratio < 0.10:
+            d_reward = 12  # Très proche du but
             print("Reward: Très proche du but", d_reward)
-        elif ratio < 0.2:
-            d_reward = 7
+        elif ratio < 0.15:
+            d_reward = 10
             print("Reward: Proche du but", d_reward)
-        elif ratio < 0.4:
+        elif ratio < 0.20:
+            d_reward = 7
+            print("Reward: Assez proche du but", d_reward)
+        elif ratio < 0.30:
             d_reward = 4
             print("Reward: Moyennement proche", d_reward)
-        elif ratio < 0.6:
-            d_reward = 1
-            print("Reward: Assez loin", d_reward)
-        elif ratio < 0.8:
-            d_reward = -1
+        elif ratio < 0.40:
+            d_reward = 2
+            print("Reward: Un peu loin", d_reward)
+        elif ratio < 0.50:
+            d_reward = 0
             print("Reward: Loin", d_reward)
-        elif ratio <= 1.0:
-            d_reward = -3
+        elif ratio < 0.60:
+            d_reward = -2
+            print("Reward: Assez loin", d_reward)
+        elif ratio < 0.70:
+            d_reward = -4
             print("Reward: Très loin", d_reward)
+        elif ratio < 0.85:
+            d_reward = -6
+            print("Reward: Très très loin", d_reward)
+        elif ratio <= 1.0:
+            d_reward = -8
+            print("Reward: Presque au maximum de distance", d_reward)
         else:
-            d_reward = -8  # Plus loin qu'au départ (s'éloigne du but)
+            d_reward = -12  # Plus loin qu'au départ (s'éloigne du but)
             print("Reward: S'éloigne du but", d_reward)
 
-        coll_reward = -0.1  # Par défaut, légère pénalité pour chaque mouvement
+        coll_reward = -1  # Par défaut, légère pénalité pour chaque mouvement
 
         for sprite in self.group.sprites():
             if sprite.feet.collidelist(self.collision_rects) > -1:
                 print("------- collision -------")
-                coll_reward = -5  # Pénalité plus faible pour collision
+                coll_reward = -10  # Pénalité plus faible pour collision
                 print(coll_reward)
             elif sprite.feet.collidelist(self.goal_rects) > -1:
                 print("------- but -------")
-                coll_reward = 20  # Plus grande récompense pour atteindre le but
+                coll_reward = 100  # Plus grande récompense pour atteindre le but
                 print(coll_reward)
+            elif sprite.feet.collidelist(self.zones_bonus_rects) > -1:
+                print("------- bonus -------")
+                coll_reward = 25
             else:
                 print("------- rien -------")
                 print(coll_reward)
@@ -160,7 +181,7 @@ class Game :
 
         # Si Ctrl+I est pressé, lancer l'IA en mode exploration
         if key_pressed[pygame.K_e]:
-            for _ in range(20):
+            for _ in range(200):
                 self.ia(500)  # lancer l'ia en mode exploration si la touche e est pressée
 
         if key_pressed[pygame.K_UP]: # si la touche haut est pressée
@@ -222,9 +243,9 @@ class Game :
         self.current_episode = 0 # initialiser le nombre d'episodes
         self.player.position = [390, 783]  # remettre le joueur à sa position d'origine
 
-        alpha = 0.1     # taux d'apprentissage
-        gamma = 0.9     # facteur de récompense future
-        epsilon = 1  # probabilité d'explorer plutôt que d'exploiter
+        alpha = 0.5    # taux d'apprentissage
+        gamma = 0.99   # facteur de récompense future
+        epsilon = 1    # probabilité d'explorer plutôt que d'exploiter
         actions = ["up", "down", "left", "right"] # actions possibles
         
     
@@ -341,5 +362,6 @@ class Game :
     
 
 
-    # FAIRE TOURNER LE JEU AVEC LA BOUCLE PLUS DE 2000 FOIS 
+    # pour ajuster les récompenses on peut détécter si le joueur tourne en boucle et pénaliser la récompenses
+    # un peu dur a faire 
 
