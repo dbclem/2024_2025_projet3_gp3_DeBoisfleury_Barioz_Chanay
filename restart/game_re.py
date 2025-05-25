@@ -20,15 +20,15 @@ class Game :
 
         # charger la carte
         # tmx_data = pytmx.util_pygame.load_pygame("map/1map -niveau0.tmx")
-        tmx_data = pytmx.util_pygame.load_pygame("map/1map -niveau0.tmx")
+        tmx_data = pytmx.util_pygame.load_pygame("restart\1map -niveau0.tmx")
         map_data = pyscroll.data.TiledMapData(tmx_data)
         map_layer = pyscroll.orthographic.BufferedRenderer(map_data, self.screen.get_size())
 
         # charger le joueur 
         player_position = tmx_data.get_object_by_name("player")
-        self.player = Player(player_position.x, player_position.y) # position du joueur sur la carte
+        self.player = Player(player_position.x, player_position.y)  # position du joueur sur la carte
 
-        # definir une lsite qui stock les rectangles de collision
+        # definir une liste qui stock les rectangles de collision
         self.collision_rects = []
         self.goal_rects = []
         self.zones_bonus_rects = []
