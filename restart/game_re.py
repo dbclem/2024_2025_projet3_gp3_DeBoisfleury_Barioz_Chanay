@@ -20,7 +20,7 @@ class Game :
 
         # charger la carte
         # tmx_data = pytmx.util_pygame.load_pygame("map/1map -niveau0.tmx")
-        tmx_data = pytmx.util_pygame.load_pygame("restart\1map -niveau0.tmx")
+        tmx_data = pytmx.util_pygame.load_pygame("map/1map -niveau0.tmx")
         map_data = pyscroll.data.TiledMapData(tmx_data)
         map_layer = pyscroll.orthographic.BufferedRenderer(map_data, self.screen.get_size())
 
