@@ -60,14 +60,11 @@ class Game :
     def def_reward (self, reward) : 
         d_reward = 0
         self.group.update()
-        print("fct reward")
-        # Récupérer la position du joueur (centre du rect)
+
         pos_x, pos_y = self.player.position[0], self.player.position[1]
         pos_goal_x , pos_goal_y = self.goal_rects[0].x, self.goal_rects[0].y
 
-        # Récupérer la position du goal (on prend le centre du premier goal_rect)
         d_manhattan_player_goal = abs(int(pos_x - pos_goal_x)) + abs(int(pos_y - pos_goal_y))
-        # Décomposition plus précise et logique des rewards basée sur la distance de Manhattan
         ratio = d_manhattan_player_goal / self.d_manhattan_init_goal
 
         if ratio < 0.05:
@@ -80,7 +77,7 @@ class Game :
             d_reward = 10
             print("Reward: Proche du but", d_reward)
         elif ratio < 0.20:
-            d_reward = 7
+            d_reward = 8
             print("Reward: Assez proche du but", d_reward)
         elif ratio < 0.30:
             d_reward = 4
@@ -95,13 +92,13 @@ class Game :
             d_reward = -2
             print("Reward: Assez loin", d_reward)
         elif ratio < 0.70:
-            d_reward = -4
+            d_reward = -5
             print("Reward: Très loin", d_reward)
         elif ratio < 0.85:
-            d_reward = -6
+            d_reward = -10
             print("Reward: Très très loin", d_reward)
         elif ratio <= 1.0:
-            d_reward = -8
+            d_reward = -15
             print("Reward: Presque au maximum de distance", d_reward)
         else:
             d_reward = -12  # Plus loin qu'au départ (s'éloigne du but)
@@ -125,9 +122,8 @@ class Game :
                 print("------- rien -------")
                 print(coll_reward)
         
-        reward = d_reward + coll_reward # recompense finale
+        reward = d_reward + coll_reward 
 
-        # Boucle : pénalité si même position revient plus de 3 fois
         repetition_count = self.last_positions.count((int(pos_x / 16) + 1, int(pos_y / 16) + 1))
         if repetition_count > 2:
             print("Boucle détectée !")
@@ -192,7 +188,7 @@ class Game :
 
         # Si Ctrl+I est pressé, lancer l'IA en mode exploration
         if key_pressed[pygame.K_e]:
-            for _ in range(200):
+            for _ in range(100):
                 self.ia(500)  # lancer l'ia en mode exploration si la touche e est pressée
 
         if key_pressed[pygame.K_UP]: # si la touche haut est pressée
@@ -258,13 +254,8 @@ class Game :
         gamma = 0.99   # facteur de récompense future
         epsilon = 0.2   # probabilité d'explorer plutôt que d'exploiter
         actions = ["up", "down", "left", "right"] # actions possibles
-        
     
         for episode in range(nb_episode_max):
-            # Réduire epsilon de 0.1 tous les 100 épisodes après 1000
-            if episode > 1000 and episode % 100 == 0 and epsilon > 0:
-                epsilon = max(0, epsilon - 0.1)
-                print(f"Nouvel epsilon: {epsilon}")
                 
             self.player.save_location() # sauvegarder la position du joueur
             self.update()
@@ -283,11 +274,10 @@ class Game :
 
             pygame.display.flip() # rafraichir l'ecran
 
-
             position_player = self.player.position # recuperer la position du joueur
             print("position joueur : ", position_player)
-            state = (int(position_player[0]/16) + 1, int(position_player[1]/16) + 1) # recuperer la position du joueur
-            # Initialiser la Q-table si elle n'existe pas
+            state = (int(position_player[0]/16) + 1, int(position_player[1]/16) + 1)
+
             try:
                 q_table = read_from_numpy_file("q_table.npy")
                 print(" ---- \n Q-table loaded \n ----")
@@ -302,15 +292,13 @@ class Game :
                 action = random.choice(actions)
                 print("exploration :", action)
             else:
-                biggest_value_action = find_biggest_q_value_with_numpy(q_table[state]) # choisir l'action avec la plus grande valeur Q
+                biggest_value_action = find_biggest_q_value_with_numpy(q_table[state])
                 action = actions[biggest_value_action]
                 print("--- \n exploitation :", action, "\n ---")
+            
             # Appliquer l'action, obtenir le nouvel état et la récompense
-
             new_state, reward = self.appliquer_action(state, action)
             self.update() # mettre à jour le groupe de sprites
-            # def_final_reward_after_action = reward_after_action (reward)
-
             action_index = index_in_list(actions, action) # recuperer l'indice de l'action choisie
 
             # Mise à jour de la Q-table
@@ -320,9 +308,7 @@ class Game :
             new_value =  alpha* old_value +  (1 - alpha)* (reward + gamma * future_max)
             q_table[state][action_index] = new_value
 
-            # Enregistrer la Q-table
             write_in_numpy_file("q_table.npy", q_table)
-            # Mettre à jour l'état
             state = new_state
             print("state : ", state)
 
