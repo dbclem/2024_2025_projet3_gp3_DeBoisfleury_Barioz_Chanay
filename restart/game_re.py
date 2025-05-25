@@ -25,7 +25,7 @@ class Game :
         # charger le joueur 
         player_position = tmx_data.get_object_by_name("player")
         self.player = Player(player_position.x, player_position.y)  # position du joueur sur la carte
-        self.last_positions = deque(maxlen=10)
+        self.last_positions = deque(maxlen=15)
 
         # definir une liste qui stock les rectangles de collision
         self.collision_rects = []
