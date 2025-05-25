@@ -13,12 +13,13 @@ Objectif est simple le player doit apprendre a sortir de son jardin
     
 
 2eme étape (humain) :
-   coder un système de déplacement pour le player
-   coder un systéme de collision afin que le joueur ne puisse pas traverser les obstacles
-    
+   coder un système de déplacement pour le player, on le déplace d'abord manuellement puis l'on code un système de déplacement aléatoire
+   coder un système de collision afin que le joueur ne puisse pas traverser les obstacles, chaque collision engendre des malus qui obligent le player à éviter les osbstacles
 
 3eme étape (q_table):
-    créer une q_table permettant au player de se déplacer à l'aide de l'ia afin de trouver une sortie
-    créer un système de recompense pour l'ia 
-    utiliser les q_table des maps précédente afin de trouver la sortie sur les maps avec de nouveaux obstacles
+    créer une q_table avec numpy ==> NumPy est une bibliothèque qui permet de créer des tableaux multidimensionnels (comme des matrices, il y en a une pour chacune des directions up, down, left, right) et d'ensuite les stocker afin de créer un q table
+    créer un système de recompense afin de diriger l'ia, lorsqu'elle se rapproche de la sortie celle-ci est récompensé cependant lorsqu'elle s'éloigne ou rencontre un obstacle elle reçoit un malus
+    Aussi des zones bonus et malus sont mise en place afin d'aiguiller l'ia
+    La q table peut être utliser de 2 maniere exploitation et exploration, en fonction de la valeur de epsilon la q table aura plus tendances à explorer la map et et agrandir la q table ou alors exploiter et affiner la q table existante
+    Finalement on utilise les q_table des maps précédentes afin de trouver la sortie sur les maps avec de nouveaux obstacles
 
