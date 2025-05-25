@@ -82,7 +82,7 @@ class Game :
                 print(coll_reward)
             elif sprite.feet.collidelist(self.zones_bonus_rects) > -1:
                 print("------- bonus -------")
-                coll_reward = 15
+                coll_reward = 6  # Récompense pour entrer dans une zone bonus
             else:
                 print("------- rien -------")
                 print(coll_reward)
@@ -148,7 +148,7 @@ class Game :
             pygame.quit() # quitter le jeu
         
         if key_pressed[pygame.K_i] :     
-            for _ in range(50):
+            for _ in range(200):
                 self.ia(self.nb_episode_max)  # lancer l'ia si la touche i est pressée
 
         # Si Ctrl+I est pressé, lancer l'IA en mode exploration
