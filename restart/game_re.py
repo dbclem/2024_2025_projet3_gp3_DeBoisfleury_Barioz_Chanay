@@ -3,6 +3,7 @@ import pytmx
 import pyscroll
 import pytmx.util_pygame
 import numpy as np
+from collections import deque
 from player import Player   
 from q_table import create_q_table, find_biggest_q_value_with_numpy
 from tools import read_from_numpy_file, write_in_numpy_file, index_in_list
@@ -27,6 +28,7 @@ class Game :
         # charger le joueur 
         player_position = tmx_data.get_object_by_name("player")
         self.player = Player(player_position.x, player_position.y)  # position du joueur sur la carte
+        self.last_positions = deque(maxlen=10)
 
         # definir une liste qui stock les rectangles de collision
         self.collision_rects = []
@@ -127,6 +129,15 @@ class Game :
                 print(coll_reward)
         
         reward = d_reward + coll_reward # recompense finale
+
+        # Boucle : pénalité si même position revient plus de 3 fois
+        repetition_count = self.last_positions.count((int(pos_x / 16) + 1, int(pos_y / 16) + 1))
+        if repetition_count > 3:
+            print("⚠️ Boucle détectée !")
+            reward -= 10  # Pénalité supplémentaire pour boucle
+
+
+  
         print("reward : ", reward)
         return reward
     
@@ -139,6 +150,7 @@ class Game :
                 self.player.change_animation("up") # changer l'animation du joueur vers le haut
             self.current_episode = adding_one(self.current_episode) # ajouter 1 au nombre d'episodes
             new_state = (int(self.player.position[0]/16) + 1 , int(self.player.position[1]/16) + 1) # recuperer la nouvelle position du joueur
+            self.last_positions.append(new_state)
             reward = self.def_reward(reward)     
             return new_state, reward # retourner la position du joueur, la recompense et si le jeu est fini
 
@@ -148,6 +160,7 @@ class Game :
                 self.player.change_animation("down") # changer l'animation du joueur vers le bas
             self.current_episode = adding_one(self.current_episode)
             new_state = (int(self.player.position[0]/16) + 1 , int(self.player.position[1]/16) + 1) # recuperer la nouvelle position du joueur
+            self.last_positions.append(new_state)
             reward = self.def_reward(reward)
             return new_state, reward # retourner la position du joueur, la recompense et si le jeu est fini
 
@@ -157,6 +170,7 @@ class Game :
                 self.player.change_animation("left") # changer l'animation du joueur vers la gauche
             self.current_episode = adding_one(self.current_episode)
             new_state = (int(self.player.position[0]/16) + 1 , int(self.player.position[1]/16) + 1) # recuperer la nouvelle position du joueur
+            self.last_positions.append(new_state)
             reward = self.def_reward(reward)
             return new_state, reward # retourner la position du joueur, la recompense et si le jeu est fini
 
@@ -166,6 +180,7 @@ class Game :
                 self.player.change_animation("right") # changer l'animation du joueur vers la droite
             self.current_episode = adding_one(self.current_episode)
             new_state = (int(self.player.position[0]/16) + 1 , int(self.player.position[1]/16) + 1) # recuperer la nouvelle position du joueur
+            self.last_positions.append(new_state)
             reward = self.def_reward(reward)
             return new_state, reward # retourner la position du joueur, la recompense et si le jeu est fini
 
@@ -245,7 +260,7 @@ class Game :
 
         alpha = 0.1   # taux d'apprentissage
         gamma = 0.99   # facteur de récompense future
-        epsilon = 1    # probabilité d'explorer plutôt que d'exploiter
+        epsilon = 0    # probabilité d'explorer plutôt que d'exploiter
         actions = ["up", "down", "left", "right"] # actions possibles
         
     
