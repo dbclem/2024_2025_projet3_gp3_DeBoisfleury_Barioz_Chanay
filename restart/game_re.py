@@ -135,8 +135,6 @@ class Game :
         if repetition_count > 3:
             print("Boucle détectée !")
             reward -= 10  # Pénalité supplémentaire pour boucle
-
-
   
         print("reward : ", reward)
         return reward
@@ -196,7 +194,7 @@ class Game :
 
         # Si Ctrl+I est pressé, lancer l'IA en mode exploration
         if key_pressed[pygame.K_e]:
-            for _ in range(200):
+            for _ in range(10):
                 self.ia(500)  # lancer l'ia en mode exploration si la touche e est pressée
 
         if key_pressed[pygame.K_UP]: # si la touche haut est pressée
@@ -260,7 +258,7 @@ class Game :
 
         alpha = 0.1   # taux d'apprentissage
         gamma = 0.99   # facteur de récompense future
-        epsilon = 0.9   # probabilité d'explorer plutôt que d'exploiter
+        epsilon = 0.3   # probabilité d'explorer plutôt que d'exploiter
         actions = ["up", "down", "left", "right"] # actions possibles
         
     
@@ -375,8 +373,3 @@ class Game :
         pygame.quit()
         return running
     
-
-
-    # pour ajuster les récompenses on peut détécter si le joueur tourne en boucle et pénaliser la récompenses
-    # un peu dur a faire 
-
