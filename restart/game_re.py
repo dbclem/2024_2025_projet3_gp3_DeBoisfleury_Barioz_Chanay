@@ -26,7 +26,6 @@ class Game :
         player_position = tmx_data.get_object_by_name("player")
         self.player = Player(player_position.x, player_position.y)  # position du joueur sur la carte
         self.last_positions = deque(maxlen=10)
-        self.previous_ratio = 1.0
 
         # definir une liste qui stock les rectangles de collision
         self.collision_rects = []
@@ -60,7 +59,6 @@ class Game :
 
     def def_reward (self, reward) : 
         d_reward = 0
-        coll_reward = 0 
         self.group.update()
 
         pos_x, pos_y = self.player.position[0], self.player.position[1]
@@ -69,13 +67,44 @@ class Game :
         d_manhattan_player_goal = abs(int(pos_x - pos_goal_x)) + abs(int(pos_y - pos_goal_y))
         ratio = d_manhattan_player_goal / self.d_manhattan_init_goal
 
-            # Récompense linéaire continue (plus fluide que des paliers)
-        d_reward = -ratio * 20 + 10
+        if ratio < 0.05:
+            d_reward = 15  # Extrêmement proche du but (récompense augmentée)
+            print("Reward: Extrêmement proche du but", d_reward)
+        elif ratio < 0.10:
+            d_reward = 12  # Très proche du but
+            print("Reward: Très proche du but", d_reward)
+        elif ratio < 0.15:
+            d_reward = 10
+            print("Reward: Proche du but", d_reward)
+        elif ratio < 0.20:
+            d_reward = 8
+            print("Reward: Assez proche du but", d_reward)
+        elif ratio < 0.30:
+            d_reward = 4
+            print("Reward: Moyennement proche", d_reward)
+        elif ratio < 0.40:
+            d_reward = 2
+            print("Reward: Un peu loin", d_reward)
+        elif ratio < 0.50:
+            d_reward = 0
+            print("Reward: Loin", d_reward)
+        elif ratio < 0.60:
+            d_reward = -2
+            print("Reward: Assez loin", d_reward)
+        elif ratio < 0.70:
+            d_reward = -5
+            print("Reward: Très loin", d_reward)
+        elif ratio < 0.85:
+            d_reward = -10
+            print("Reward: Très très loin", d_reward)
+        elif ratio <= 1.0:
+            d_reward = -15
+            print("Reward: Presque au maximum de distance", d_reward)
+        else:
+            d_reward = -12  # Plus loin qu'au départ (s'éloigne du but)
+            print("Reward: S'éloigne du but", d_reward)
 
-        # BONUS : punir si l'IA s’éloigne du but
-        if  ratio > self.previous_ratio:
-            print("L'IA s'éloigne du but → petite pénalité")
-            d_reward -= 3
+        coll_reward = -1  # Par défaut, légère pénalité pour chaque mouvement
 
         for sprite in self.group.sprites():
             if sprite.feet.collidelist(self.collision_rects) > -1:
@@ -97,8 +126,8 @@ class Game :
 
         repetition_count = self.last_positions.count((int(pos_x / 16) + 1, int(pos_y / 16) + 1))
         if repetition_count > 2:
-            print(f"Boucle détectée")
-            reward -= repetition_count * 3  # punition croissante
+            print("Boucle détectée !")
+            reward -= 10  # Pénalité supplémentaire pour boucle
   
         print("reward : ", reward)
         return reward
@@ -276,7 +305,7 @@ class Game :
             old_value = q_table[state][action_index]
             future_max = np.argmax(q_table[new_state])
 
-            new_value =  (1 - alpha)* old_value +  alpha* (reward + gamma * future_max)
+            new_value =  alpha* old_value +  (1 - alpha)* (reward + gamma * future_max)
             q_table[state][action_index] = new_value
 
             write_in_numpy_file("q_table.npy", q_table)
