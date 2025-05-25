@@ -133,7 +133,7 @@ class Game :
         # Boucle : pénalité si même position revient plus de 3 fois
         repetition_count = self.last_positions.count((int(pos_x / 16) + 1, int(pos_y / 16) + 1))
         if repetition_count > 3:
-            print("⚠️ Boucle détectée !")
+            print("Boucle détectée !")
             reward -= 10  # Pénalité supplémentaire pour boucle
 
 
@@ -260,7 +260,7 @@ class Game :
 
         alpha = 0.1   # taux d'apprentissage
         gamma = 0.99   # facteur de récompense future
-        epsilon = 0    # probabilité d'explorer plutôt que d'exploiter
+        epsilon = 0.9   # probabilité d'explorer plutôt que d'exploiter
         actions = ["up", "down", "left", "right"] # actions possibles
         
     
