@@ -21,9 +21,14 @@ class Player(pygame.sprite.Sprite):
         self.old_position = self.position.copy() # copier l'ancienne position du joueur
         self.speed = 2 # vitesse de deplacement du joueur
 
-    def save_location (self) : 
-        self.old_position = self.position.copy()
-
+    def get_image(self, x, y) :
+        """
+        Récupère une des images de la sprite sheet à partir de ses coordonnées (x, y)
+        Pour récupérer un seul element d'animation 
+        """
+        image = pygame.Surface((32, 32)) # taille du bout d'image qu'on veut récupérer (taile du joueur)
+        image.blit(self.sprite_sheet, (0, 0), (x, y, 32, 32)) # extraire un morceau de l'image 
+        return image
 
     def change_animation(self, direction):
         """
@@ -50,11 +55,12 @@ class Player(pygame.sprite.Sprite):
     def move_down(self):
         self.position[1] += self.speed
 
-
-
     def update(self):
         self.rect.topleft = self.position # topleft = position de coin supérieur gauche du rectangle = position du joueur
         self.feet.midbottom = self.rect.midbottom # midbottom = milieu du bas du rectangle = position des pieds du joueur
+    
+    def save_location (self) : 
+        self.old_position = self.position.copy()
 
     def move_back(self) : 
         """
@@ -64,12 +70,5 @@ class Player(pygame.sprite.Sprite):
         self.rect.topleft = self.position
         self.feet.midbottom = self.rect.midbottom
 
-    def get_image(self, x, y) :
-        """
-        Récupère une des images de la sprite sheet à partir de ses coordonnées (x, y)
-        Pour récupérer un seul element d'animation 
-        """
-        image = pygame.Surface((32, 32)) # taille du bout d'image qu'on veut récupérer (taile du joueur)
-        image.blit(self.sprite_sheet, (0, 0), (x, y, 32, 32)) # extraire un morceau de l'image 
-        return image
+
 

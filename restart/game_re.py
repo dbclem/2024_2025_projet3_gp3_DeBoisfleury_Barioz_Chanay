@@ -14,13 +14,10 @@ from tools import adding_one
 class Game : 
     def __init__(self):
         
-
         self.screen = pygame.display.set_mode((54*16, 54*16))
         pygame.display.set_caption("Game")
 
-
         # charger la carte
-        # tmx_data = pytmx.util_pygame.load_pygame("map/1map -niveau0.tmx")
         tmx_data = pytmx.util_pygame.load_pygame("map/1map -niveau0.tmx")
         map_data = pyscroll.data.TiledMapData(tmx_data)
         map_layer = pyscroll.orthographic.BufferedRenderer(map_data, self.screen.get_size())
@@ -189,12 +186,13 @@ class Game :
         if key_pressed[pygame.K_ESCAPE]: # si la touche echap est pressée
             pygame.quit() # quitter le jeu
         
-        if key_pressed[pygame.K_i] :           
-            self.ia(self.nb_episode_max)  # lancer l'ia si la touche i est pressée
+        if key_pressed[pygame.K_i] :     
+            for _ in range(20):
+                self.ia(self.nb_episode_max)  # lancer l'ia si la touche i est pressée
 
         # Si Ctrl+I est pressé, lancer l'IA en mode exploration
         if key_pressed[pygame.K_e]:
-            for _ in range(10):
+            for _ in range(200):
                 self.ia(500)  # lancer l'ia en mode exploration si la touche e est pressée
 
         if key_pressed[pygame.K_UP]: # si la touche haut est pressée
@@ -245,7 +243,7 @@ class Game :
         """
         Calculer le nombre d'episodes en fonction de la distance entre le joueur et le but
         """
-        multiplicateur_d_min = 0.35
+        multiplicateur_d_min = 2.5
         nb_episodes = int( ( int(self.d_manhattan_init_goal) + int(self.d_manhattan_init_goal) * multiplicateur_d_min) // 16) 
         print("nb episodes : ", nb_episodes)
         return nb_episodes
@@ -258,7 +256,7 @@ class Game :
 
         alpha = 0.1   # taux d'apprentissage
         gamma = 0.99   # facteur de récompense future
-        epsilon = 0.3   # probabilité d'explorer plutôt que d'exploiter
+        epsilon = 0.1   # probabilité d'explorer plutôt que d'exploiter
         actions = ["up", "down", "left", "right"] # actions possibles
         
     
