@@ -1,25 +1,31 @@
-Edgar Barioz 
-Cassandre Chanay 
-Clement de Boisfleury
+Edgar Barioz
+Cassandre Chanay
+Clément de Boisfleury
 
+Objectif :
+    L’objectif est simple : le player doit apprendre à sortir de son jardin.
 
-Objectif est simple le player doit apprendre a sortir de son jardin 
+1ʳᵉ étape (environnement) :
+    Créer un espace de jeu pour la simulation → un carré
+    Créer un lieu de spawn et de sortie
+    Créer une grille pour mieux visualiser les déplacements du player
+    À chaque fois que le player sort de son jardin, il a accès à une nouvelle map plus difficile, avec de nouveaux obstacles et missions
 
-1ere étape (environnement) :  
-    creer un espace de jeu pour la simulation --> un carré
-    créer un lieu de spawn et de sortie
-    créer une grille pour mieux comprendre les déplacements du player
-    ajouter des maps avec de nouveaux ostacles pour le player a chaque fois qu'il sort de son jardin
-    
+2ᵉ étape (humain) :
+    Coder un système de déplacement pour le player : on le déplace d’abord manuellement, puis on code un système de déplacement aléatoire
+    Ajouter de l’animation au déplacement pour l’esthétique
+    Pour rendre le déplacement plus fluide, chaque mouvement est une répétition de petits pas
+    Coder un système de collision afin que le joueur ne puisse pas traverser les obstacles. Chaque collision entraîne un malus, ce qui oblige le player à éviter les obstacles
 
-2eme étape (humain) :
-   coder un système de déplacement pour le player, on le déplace d'abord manuellement puis l'on code un système de déplacement aléatoire
-   coder un système de collision afin que le joueur ne puisse pas traverser les obstacles, chaque collision engendre des malus qui obligent le player à éviter les osbstacles
+3ᵉ étape (Q-table) :
+    Créer une Q-table avec NumPy → NumPy est une bibliothèque qui permet de créer des tableaux multidimensionnels (comme des matrices ; il y en a une pour chacune des directions : up, down, left, right), et de les stocker pour créer une Q-table
+    Créer un système de récompense afin de guider l’IA : lorsqu’elle se rapproche de la sortie, elle est récompensée ; lorsqu’elle s’éloigne ou rencontre un obstacle, elle reçoit un malus
+    Des zones bonus et malus sont également mises en place afin d’aiguiller l’IA
+    La Q-table peut être utilisée de deux manières : exploitation et exploration. En fonction de la valeur de epsilon, la Q-table aura plus tendance à explorer la map (et donc à agrandir la q table) ou à exploiter et affiner la Q-table existante
+    Finalement, on utilise les Q-tables des maps précédentes pour trouver la sortie sur les maps contenant de nouveaux obstacles
 
-3eme étape (q_table):
-    créer une q_table avec numpy ==> NumPy est une bibliothèque qui permet de créer des tableaux multidimensionnels (comme des matrices, il y en a une pour chacune des directions up, down, left, right) et d'ensuite les stocker afin de créer un q table
-    créer un système de recompense afin de diriger l'ia, lorsqu'elle se rapproche de la sortie celle-ci est récompensé cependant lorsqu'elle s'éloigne ou rencontre un obstacle elle reçoit un malus
-    Aussi des zones bonus et malus sont mise en place afin d'aiguiller l'ia
-    La q table peut être utliser de 2 maniere exploitation et exploration, en fonction de la valeur de epsilon la q table aura plus tendances à explorer la map et et agrandir la q table ou alors exploiter et affiner la q table existante
-    Finalement on utilise les q_table des maps précédentes afin de trouver la sortie sur les maps avec de nouveaux obstacles
-
+4ᵉ étape (observation) :
+    Au départ, l’IA est principalement en exploration afin de découvrir la map
+    Avec le temps, l’IA semble avoir exploré une grande partie de la map, ce qui nous permet de lancer l’exploitation de la Q-table et donc de l’affiner
+    Une fois l’exploitation lancée, l’IA se dirige vers le pont, qui lui confère un gros bonus, puis trouve assez facilement la sortie
+    Finalement nous pouvons observer que l'ia à tendance à faire des boucles mais grâce à la partie aléatoire elle arrive à sortir de celles-ci, aussi une fois arrivé au pont et donc à la zone bonus, l'ia arrive assez facilement à rejoindre la sortie
