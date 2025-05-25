@@ -67,42 +67,7 @@ class Game :
         d_manhattan_player_goal = abs(int(pos_x - pos_goal_x)) + abs(int(pos_y - pos_goal_y))
         ratio = d_manhattan_player_goal / self.d_manhattan_init_goal
 
-        if ratio < 0.05:
-            d_reward = 15  # Extrêmement proche du but (récompense augmentée)
-            print("Reward: Extrêmement proche du but", d_reward)
-        elif ratio < 0.10:
-            d_reward = 12  # Très proche du but
-            print("Reward: Très proche du but", d_reward)
-        elif ratio < 0.15:
-            d_reward = 10
-            print("Reward: Proche du but", d_reward)
-        elif ratio < 0.20:
-            d_reward = 8
-            print("Reward: Assez proche du but", d_reward)
-        elif ratio < 0.30:
-            d_reward = 4
-            print("Reward: Moyennement proche", d_reward)
-        elif ratio < 0.40:
-            d_reward = 2
-            print("Reward: Un peu loin", d_reward)
-        elif ratio < 0.50:
-            d_reward = 0
-            print("Reward: Loin", d_reward)
-        elif ratio < 0.60:
-            d_reward = -2
-            print("Reward: Assez loin", d_reward)
-        elif ratio < 0.70:
-            d_reward = -5
-            print("Reward: Très loin", d_reward)
-        elif ratio < 0.85:
-            d_reward = -10
-            print("Reward: Très très loin", d_reward)
-        elif ratio <= 1.0:
-            d_reward = -15
-            print("Reward: Presque au maximum de distance", d_reward)
-        else:
-            d_reward = -12  # Plus loin qu'au départ (s'éloigne du but)
-            print("Reward: S'éloigne du but", d_reward)
+        d_reward = -ratio*20 + 20
 
         coll_reward = -1  # Par défaut, légère pénalité pour chaque mouvement
 
@@ -117,7 +82,7 @@ class Game :
                 print(coll_reward)
             elif sprite.feet.collidelist(self.zones_bonus_rects) > -1:
                 print("------- bonus -------")
-                coll_reward = 20
+                coll_reward = 15
             else:
                 print("------- rien -------")
                 print(coll_reward)
@@ -183,12 +148,12 @@ class Game :
             pygame.quit() # quitter le jeu
         
         if key_pressed[pygame.K_i] :     
-            for _ in range(20):
+            for _ in range(50):
                 self.ia(self.nb_episode_max)  # lancer l'ia si la touche i est pressée
 
         # Si Ctrl+I est pressé, lancer l'IA en mode exploration
         if key_pressed[pygame.K_e]:
-            for _ in range(100):
+            for _ in range(50):
                 self.ia(500)  # lancer l'ia en mode exploration si la touche e est pressée
 
         if key_pressed[pygame.K_UP]: # si la touche haut est pressée
@@ -252,7 +217,7 @@ class Game :
 
         alpha = 0.1   # taux d'apprentissage
         gamma = 0.99   # facteur de récompense future
-        epsilon = 0.2   # probabilité d'explorer plutôt que d'exploiter
+        epsilon = 0.3   # probabilité d'explorer plutôt que d'exploiter
         actions = ["up", "down", "left", "right"] # actions possibles
     
         for episode in range(nb_episode_max):
@@ -305,7 +270,7 @@ class Game :
             old_value = q_table[state][action_index]
             future_max = np.argmax(q_table[new_state])
 
-            new_value =  alpha* old_value +  (1 - alpha)* (reward + gamma * future_max)
+            new_value =  (1 - alpha)* old_value +  alpha* (reward + gamma * future_max)
             q_table[state][action_index] = new_value
 
             write_in_numpy_file("q_table.npy", q_table)
