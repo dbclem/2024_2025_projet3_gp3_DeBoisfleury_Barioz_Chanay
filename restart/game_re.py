@@ -148,7 +148,7 @@ class Game :
             pygame.quit() # quitter le jeu
         
         if key_pressed[pygame.K_i] :     
-            for _ in range(200):
+            for _ in range(1):
                 self.ia(self.nb_episode_max)  # lancer l'ia si la touche i est pressée
 
         # Si Ctrl+I est pressé, lancer l'IA en mode exploration
