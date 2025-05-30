@@ -62,7 +62,8 @@ class Game :
             pygame.draw.line(self.screen, (255, 0, 0), (0, y), (self.screen.get_width(), y), 1)   
 
 
-    def def_reward (self, reward) : 
+    def def_reward (self) : 
+        reward = 0
         d_reward = 0
         self.group.update()
 
@@ -102,49 +103,24 @@ class Game :
         print("reward : ", reward)
         return reward
     
-    def appliquer_action(self, state, action): 
+    def appliquer_action(self, direction): 
         reward = 0 
 
-        if action == "up": # si l'action est de deplacer le joueur vers le haut
-            for _ in range(8): # deplacer le joueur vers le haut
-                self.player.move_up() # deplacer le joueur vers le haut
-                self.player.change_animation("up") # changer l'animation du joueur vers le haut
-            self.current_episode = adding_one(self.current_episode) # ajouter 1 au nombre d'episodes
-            new_state = (int(self.player.position[0]/16) + 1 , int(self.player.position[1]/16) + 1) # recuperer la nouvelle position du joueur
-            self.last_positions.append(new_state)
-            reward = self.def_reward(reward)     
-            return new_state, reward # retourner la position du joueur, la recompense et si le jeu est fini
-
-        elif action == "down": # si l'action est de deplacer le joueur vers le bas
-            for _ in range(8): # deplacer le joueur vers le bas
-                self.player.move_down() # deplacer le joueur vers le bas
-                self.player.change_animation("down") # changer l'animation du joueur vers le bas
-            self.current_episode = adding_one(self.current_episode)
-            new_state = (int(self.player.position[0]/16) + 1 , int(self.player.position[1]/16) + 1) # recuperer la nouvelle position du joueur
-            self.last_positions.append(new_state)
-            reward = self.def_reward(reward)
-            return new_state, reward # retourner la position du joueur, la recompense et si le jeu est fini
-
-        elif action == "left": # si l'action est de deplacer le joueur vers la gauche
-            for _ in range(8): # deplacer le joueur vers la gauche
-                self.player.move_left() # deplacer le joueur vers la gauche
-                self.player.change_animation("left") # changer l'animation du joueur vers la gauche
-            self.current_episode = adding_one(self.current_episode)
-            new_state = (int(self.player.position[0]/16) + 1 , int(self.player.position[1]/16) + 1) # recuperer la nouvelle position du joueur
-            self.last_positions.append(new_state)
-            reward = self.def_reward(reward)
-            return new_state, reward # retourner la position du joueur, la recompense et si le jeu est fini
-
-        elif action == "right": # si l'action est de deplacer le joueur vers la droite
-            for _ in range(8): # deplacer le joueur vers la droite
-                self.player.move_right() # deplacer le joueur vers la droite
-                self.player.change_animation("right") # changer l'animation du joueur vers la droite
-            self.current_episode = adding_one(self.current_episode)
-            new_state = (int(self.player.position[0]/16) + 1 , int(self.player.position[1]/16) + 1) # recuperer la nouvelle position du joueur
-            self.last_positions.append(new_state)
-            reward = self.def_reward(reward)
-            return new_state, reward # retourner la position du joueur, la recompense et si le jeu est fini
-
+        move_methods = {
+            "up": self.player.move_up,
+            "down": self.player.move_down,
+            "left": self.player.move_left,
+            "right": self.player.move_right,
+        }
+        anim = direction
+        for _ in range(8):
+            move_methods[direction]()
+            self.player.change_animation(anim)
+        self.current_episode = adding_one(self.current_episode)
+        new_state = (int(self.player.position[0]/16) + 1, int(self.player.position[1]/16) + 1)
+        self.last_positions.append(new_state)
+        reward = self.def_reward()
+        return new_state, reward
 
     def input(self) : 
         key_pressed = pygame.key.get_pressed() # recuperer les touches pressées
@@ -260,7 +236,7 @@ class Game :
                 print("--- \n exploitation :", action, "\n ---")
             
             # Appliquer l'action, obtenir le nouvel état et la récompense
-            new_state, reward = self.appliquer_action(state, action)
+            new_state, reward = self.appliquer_action(action)
             self.update() # mettre à jour le groupe de sprites
             action_index = index_in_list(actions, action) # recuperer l'indice de l'action choisie
 
