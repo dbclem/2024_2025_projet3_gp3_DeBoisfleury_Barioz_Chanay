@@ -1,15 +1,12 @@
 import pygame
-import pytmx  
 import pyscroll
 import pytmx.util_pygame
 import numpy as np
 from collections import deque
 from player import Player   
 from q_table import create_q_table, find_biggest_q_value_with_numpy
-from tools import read_from_numpy_file, write_in_numpy_file, index_in_list
+from tools import read_from_numpy_file, write_in_numpy_file, index_in_list, adding_one
 import random
-from tools import adding_one
-
 
 class Game : 
     def __init__(self):
@@ -46,6 +43,14 @@ class Game :
         self.d_manhattan_init_goal = abs(self.player.position[1] - self.goal_rects[0].y) + abs(self.player.position[0] - self.goal_rects[0].x)
         self.current_episode = 0 # initialiser le nombre d'episodes
         self.nb_episode_max = self.episode()
+
+
+    def _draw_episode_info(self):
+        font = pygame.font.SysFont(None, 36)
+        max_episode_text = font.render(f"Max Episodes: {self.nb_episode_max}", True, (0, 0, 0))
+        episode_text = font.render(f"Episode: {self.current_episode}", True, (0, 0, 0))
+        self.screen.blit(max_episode_text, (10, 40))
+        self.screen.blit(episode_text, (10, 10))
 
     def show_grid(self):
         """
@@ -228,14 +233,7 @@ class Game :
             self.group.draw(self.screen) # dessiner le groupe de sprites sur l'ecran
             self.show_grid() # afficher la grille de la carte
             
-            # Afficher le nombre max d'épisodes en haut à gauche
-            font_episode_max = pygame.font.SysFont(None, 36)
-            max_episode_text = font_episode_max.render(f"Max Episodes: {nb_episode_max}", True, (0, 0, 0))
-            self.screen.blit(max_episode_text, (10, 40))
-            # Afficher le current_episode en haut à gauche
-            font_current_episode = pygame.font.SysFont(None, 36)
-            episode_text = font_current_episode.render(f"Episode: {self.current_episode}", True, (0, 0, 0))
-            self.screen.blit(episode_text, (10, 10))
+            self._draw_episode_info()  
 
             pygame.display.flip() # rafraichir l'ecran
 
@@ -291,15 +289,8 @@ class Game :
             self.group.center(self.player.rect) # centrer la camera sur le joueur
             self.group.draw(self.screen) # dessiner le groupe de sprites sur l'ecran
             self.show_grid() # afficher la grille de la carte
-            
-            # Afficher le nombre max d'épisodes en haut à gauche
-            font_episode_max = pygame.font.SysFont(None, 36)
-            max_episode_text = font_episode_max.render(f"Max Episodes: {self.nb_episode_max}", True, (0, 0, 0))
-            self.screen.blit(max_episode_text, (10, 40))
-            # Afficher le current_episode en haut à gauche
-            font_current_episode = pygame.font.SysFont(None, 36)
-            episode_text = font_current_episode.render(f"Episode: {self.current_episode}", True, (0, 0, 0))
-            self.screen.blit(episode_text, (10, 10))
+
+            self._draw_episode_info()  # afficher le nombre d'episodes
 
             pygame.display.flip() # rafraichir l'ecran
             
