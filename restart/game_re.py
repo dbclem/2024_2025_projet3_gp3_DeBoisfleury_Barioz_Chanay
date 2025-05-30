@@ -73,7 +73,7 @@ class Game :
         d_manhattan_player_goal = abs(int(pos_x - pos_goal_x)) + abs(int(pos_y - pos_goal_y))
         ratio = d_manhattan_player_goal / self.d_manhattan_init_goal
 
-        d_reward = -ratio*20 + 20
+        d_reward = 20 - ratio * 20
 
         coll_reward = -1  # Par défaut, légère pénalité pour chaque mouvement
 
@@ -89,9 +89,6 @@ class Game :
             elif sprite.feet.collidelist(self.zones_bonus_rects) > -1:
                 print("------- bonus -------")
                 coll_reward = 6  # Récompense pour entrer dans une zone bonus
-            else:
-                print("------- rien -------")
-                print(coll_reward)
         
         reward = d_reward + coll_reward 
 
